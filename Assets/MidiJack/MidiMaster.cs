@@ -47,6 +47,11 @@ namespace MidiJack
             return MidiDriver.Instance.GetKey(channel, noteNumber);
         }
 
+        public static float[] GetAllKeys(MidiChannel channel)
+        {
+            return MidiDriver.Instance.GetAllKeys(channel);
+        }
+
         public static float GetKey(int noteNumber)
         {
             return MidiDriver.Instance.GetKey(MidiChannel.All, noteNumber);

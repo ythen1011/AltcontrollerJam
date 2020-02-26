@@ -61,6 +61,11 @@ namespace MidiJack
 
         #region Accessor Methods
 
+        public float[] GetAllKeys(MidiChannel channel)
+        {
+            return _channelArray[(int)channel]._noteArray;
+        }
+
         public float GetKey(MidiChannel channel, int noteNumber)
         {
             UpdateIfNeeded();
