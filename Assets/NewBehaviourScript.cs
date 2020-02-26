@@ -20,9 +20,5 @@ public class NewBehaviourScript : MonoBehaviour
             Debug.Log("hi");
         }
 
-        
-        
-            Debug.Log(MidiMaster.GetKey(MidiChannel.All, noteNumber: 59));
-        
     }
 }
