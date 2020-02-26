@@ -2,63 +2,120 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class Chord 
+{
+  
+    public Chord(ChordEnum _chord, Keys _key, ChordFunction _function, List<Note> _notes ){
+        this.chord = _chord;
+        this.keyThisChordIsIn = _key;
+        this.functionWithinKey = _function;
+        this.notes = _notes;
+        
+    }
+    public ChordEnum chord = ChordEnum.none;
+    public Keys keyThisChordIsIn = Keys.none; 
+    public ChordFunction functionWithinKey = ChordFunction.none;
+    public List<Note> notes = null;
+}
+
+
 public class Chords : MonoBehaviour
 {
-    private static Chords instance = null;
+    //private static Chords instance = null;
 
-    public static Chords Instance
+    //public static Chords Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = AddComponent<Chords>();
+    //        }
+    //        return instance;
+    //    }
+    //}
+
+
+
+    Dictionary<ChordEnum, List<Note>> allChords = new Dictionary<ChordEnum, List<Note>>();
+
+    Dictionary<Keys,  Dictionary<ChordFunction, List<ChordEnum> >  > functionalChords = new Dictionary<Keys, Dictionary<ChordFunction, List<ChordEnum>>>();
+
+    //Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>> cMajorChords = new Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>>();
+
+
+    public Chord GetChordOfType(Keys key, ChordFunction function) // returns random chord in a given key that performs given function, (functional harmony)
     {
-        get
+        Chord chord;
+        ChordEnum chordname = ChordEnum.none;
+
+        if (functionalChords[key].ContainsKey(function)) // this should always pass, just to be safe
         {
-            if (instance == null)
-            {
-                instance = new Chords();
-            }
-            return instance;
+            chordname = functionalChords[key][function][Random.Range((int)0, functionalChords[key][function].Count-1)]; // get a random chord of this function
         }
+        else
+        {
+            Debug.LogError("Functional type not recognised");
+        }
+
+        chord = new Chord(chordname, key, function, allChords[chordname]);
+        return chord;
+             
     }
-
-
-
-    Dictionary<chord, List<Note>> allChords = new Dictionary<chord, List<Note>>();
-    Dictionary<functionalCMajor, Dictionary<chord, List<Note>>> cMajorChords = new Dictionary<functionalCMajor, Dictionary<chord, List<Note>>>();
-
 
     private void Start()
     {
 
         // C1 Major
-
-        allChords[chord.C1] = new List<Note> { Note.c1, Note.e2, Note.g1 };
-        allChords[chord.Dm1] = new List<Note> { Note.d1, Note.f2, Note.a2 };
-        allChords[chord.Em1] = new List<Note> { Note.e1, Note.g2, Note.b2 };
-        allChords[chord.F1] = new List<Note> { Note.f1, Note.a2, Note.c2 };
-        allChords[chord.G1] = new List<Note> { Note.g1, Note.b2, Note.d2 };
+        allChords[ChordEnum.C1] = new List<Note> { Note.c1, Note.e2, Note.g1 };
+        allChords[ChordEnum.Dm1] = new List<Note> { Note.d1, Note.f2, Note.a2 };
+        allChords[ChordEnum.Em1] = new List<Note> { Note.e1, Note.g2, Note.b2 };
+        allChords[ChordEnum.F1] = new List<Note> { Note.f1, Note.a2, Note.c2 };
+        allChords[ChordEnum.G1] = new List<Note> { Note.g1, Note.b2, Note.d2 };
 
         // C2 Major
-        allChords[chord.Am2] = new List<Note> { Note.a2, Note.c2, Note.e2 };
-        allChords[chord.Bdim2] = new List<Note> { Note.b2, Note.d2, Note.f2 };
-        allChords[chord.C2] = new List<Note> { Note.c2, Note.e2, Note.g2 };
-        allChords[chord.Dm2] = new List<Note> { Note.d2, Note.f2, Note.a3 };
-        allChords[chord.Em2] = new List<Note> { Note.e2, Note.g2, Note.b3 };
-        allChords[chord.F2] = new List<Note> { Note.f2, Note.a3, Note.c3 };
-        allChords[chord.G2] = new List<Note> { Note.g2, Note.b3, Note.d3 };
+        allChords[ChordEnum.Am2] = new List<Note> { Note.a2, Note.c2, Note.e2 };
+        allChords[ChordEnum.Bdim2] = new List<Note> { Note.b2, Note.d2, Note.f2 };
+        allChords[ChordEnum.C2] = new List<Note> { Note.c2, Note.e2, Note.g2 };
+        allChords[ChordEnum.Dm2] = new List<Note> { Note.d2, Note.f2, Note.a3 };
+        allChords[ChordEnum.Em2] = new List<Note> { Note.e2, Note.g2, Note.b3 };
+        allChords[ChordEnum.F2] = new List<Note> { Note.f2, Note.a3, Note.c3 };
+        allChords[ChordEnum.G2] = new List<Note> { Note.g2, Note.b3, Note.d3 };
 
         // C3 Major
-        allChords[chord.Am3] = new List<Note> { Note.a3, Note.c3, Note.e3 };
-        allChords[chord.Bdim3] = new List<Note> { Note.b3, Note.d3, Note.f3 };
-        allChords[chord.C3] = new List<Note> { Note.c3, Note.e3, Note.g3 };
-        allChords[chord.Dm3] = new List<Note> { Note.d3, Note.f3, Note.a4 };
-        allChords[chord.Em3] = new List<Note> { Note.e3, Note.g3, Note.b4 };
-        allChords[chord.F3] = new List<Note> { Note.f3, Note.a4, Note.c4 };
-        allChords[chord.G3] = new List<Note> { Note.g3, Note.b4, Note.d4 };
+        allChords[ChordEnum.Am3] = new List<Note> { Note.a3, Note.c3, Note.e3 };
+        allChords[ChordEnum.Bdim3] = new List<Note> { Note.b3, Note.d3, Note.f3 };
+        allChords[ChordEnum.C3] = new List<Note> { Note.c3, Note.e3, Note.g3 };
+        allChords[ChordEnum.Dm3] = new List<Note> { Note.d3, Note.f3, Note.a4 };
+        allChords[ChordEnum.Em3] = new List<Note> { Note.e3, Note.g3, Note.b4 };
+        allChords[ChordEnum.F3] = new List<Note> { Note.f3, Note.a4, Note.c4 };
+        allChords[ChordEnum.G3] = new List<Note> { Note.g3, Note.b4, Note.d4 };
 
         // C4 Major
-        allChords[chord.Am4] = new List<Note> { Note.a4, Note.c4, Note.e4 };
-        allChords[chord.Bdim4] = new List<Note> { Note.b4, Note.d4, Note.f4 };
-        allChords[chord.C4] = new List<Note> { Note.c4, Note.e4, Note.g4 };
+        allChords[ChordEnum.Am4] = new List<Note> { Note.a4, Note.c4, Note.e4 };
+        allChords[ChordEnum.Bdim4] = new List<Note> { Note.b4, Note.d4, Note.f4 };
+        allChords[ChordEnum.C4] = new List<Note> { Note.c4, Note.e4, Note.g4 };
 
+        // C Major functional chords
+        functionalChords[Keys.CMajor] = new Dictionary<ChordFunction, List<ChordEnum>>();
+        functionalChords[Keys.CMajor][ChordFunction.root] = new List<ChordEnum> {  ChordEnum.C1, ChordEnum.C2, ChordEnum.C3, ChordEnum.C4 };
 
+        functionalChords[Keys.CMajor][ChordFunction.tonic] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMajor.I1,       (ChordEnum)FunctionalCMajor.I2,     (ChordEnum)FunctionalCMajor.I3,     (ChordEnum)FunctionalCMajor.I4,
+            (ChordEnum)FunctionalCMajor.iii1,   (ChordEnum)FunctionalCMajor.iii2,   (ChordEnum)FunctionalCMajor.iii3,   (ChordEnum)FunctionalCMajor.iii4,
+            (ChordEnum)FunctionalCMajor.vi1,     (ChordEnum)FunctionalCMajor.vi2,    (ChordEnum)FunctionalCMajor.vi3, 
+        };
+        
+        functionalChords[Keys.CMajor][ChordFunction.subdominant] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMajor.IV1,       (ChordEnum)FunctionalCMajor.IV2,     (ChordEnum)FunctionalCMajor.IV3,     (ChordEnum)FunctionalCMajor.IV4,
+            (ChordEnum)FunctionalCMajor.ii1,       (ChordEnum)FunctionalCMajor.ii2,     (ChordEnum)FunctionalCMajor.ii3,     (ChordEnum)FunctionalCMajor.ii4, 
+        }; 
+        
+        functionalChords[Keys.CMajor][ChordFunction.dominant] = new List<ChordEnum> {
+                  (ChordEnum)FunctionalCMajor.V1,             (ChordEnum)FunctionalCMajor.V2,          (ChordEnum)FunctionalCMajor.V3,      (ChordEnum)FunctionalCMajor.V4,
+            (ChordEnum)FunctionalCMajor.viiidim1,       (ChordEnum)FunctionalCMajor.viiidim2,     (ChordEnum)FunctionalCMajor.viiidim3,      
+        };
 
 
     }
@@ -67,47 +124,68 @@ public class Chords : MonoBehaviour
 
 }
 
-
-enum functionalCMajor
+public enum Keys
 {
-    //C1
-    I1 = chord.C1,
-    ii1 = chord.Dm1,
-    iii1 = chord.Em1,
-    IV1 = chord.F1,
-    V1 = chord.G1,
-    vi1 = chord.Am2,
-    viiidim1 = chord.Bdim2,
+    none = 0,
+
+    CMajor,
+}
+
+public enum ChordFunction
+{
+    none = 0,
+
+    root,
+
+    tonic,
+    dominant,
+    subdominant,
+}
+
+public enum FunctionalCMajor
+{
+    none = 0,
 
     //C1
-    I2 = chord.C2,
-    ii2 = chord.Dm2,
-    iii2 = chord.Em2,
-    IV2 = chord.F2,
-    V2 = chord.G2,
-    vi2 = chord.Am3,
-    viiidim2 = chord.Bdim3,
+    I1 = ChordEnum.C1,
+    ii1 = ChordEnum.Dm1,
+    iii1 = ChordEnum.Em1,
+    IV1 = ChordEnum.F1,
+    V1 = ChordEnum.G1,
+    vi1 = ChordEnum.Am2,
+    viiidim1 = ChordEnum.Bdim2,
+
+    //C1
+    I2 = ChordEnum.C2,
+    ii2 = ChordEnum.Dm2,
+    iii2 = ChordEnum.Em2,
+    IV2 = ChordEnum.F2,
+    V2 = ChordEnum.G2,
+    vi2 = ChordEnum.Am3,
+    viiidim2 = ChordEnum.Bdim3,
 
     //C3
-    I3 = chord.C3,
-    ii3 = chord.Dm3,
-    iii3 = chord.Em3,
-    IV3 = chord.F3,
-    V3 = chord.G3,
-    vi3 = chord.Am4,
-    viiidim3 = chord.Bdim4,
+    I3 = ChordEnum.C3,
+    ii3 = ChordEnum.Dm3,
+    iii3 = ChordEnum.Em3,
+    IV3 = ChordEnum.F3,
+    V3 = ChordEnum.G3,
+    vi3 = ChordEnum.Am4,
+    viiidim3 = ChordEnum.Bdim4,
 
     //C4
-    I4 = chord.C4,
-    ii4 = chord.Dm4,
-    iii4 = chord.Em4,
-    IV4 = chord.F4,
-    V4 = chord.G4,
+    I4 = ChordEnum.C4,
+    ii4 = ChordEnum.Dm4,
+    iii4 = ChordEnum.Em4,
+    IV4 = ChordEnum.F4,
+    V4 = ChordEnum.G4,
 
 }
 
-enum chord
+public enum ChordEnum
 {
+    none = 0,
+
     // C1 Major key
     C1,
     Dm1,
@@ -146,8 +224,10 @@ enum chord
 
 
 
-enum Note
+public enum Note
 {
+    none = 0,
+
     c1 = 48,
     cs1 = 49,
     db1 = 49,
