@@ -5,13 +5,21 @@ using UnityEngine;
 [System.Serializable]
 public class Chord 
 {
-  
+    
     public Chord(ChordEnum _chord, Keys _key, ChordFunction _function, List<Note> _notes ){
         this.chord = _chord;
         this.keyThisChordIsIn = _key;
         this.functionWithinKey = _function;
         this.notes = _notes;
         
+    }
+    public Chord(Chord _chord)
+    {
+        this.chord = _chord.chord;
+        this.keyThisChordIsIn = _chord.keyThisChordIsIn;
+        this.functionWithinKey = _chord.functionWithinKey;
+        this.notes = _chord.notes;
+
     }
     public ChordEnum chord = ChordEnum.none;
     public Keys keyThisChordIsIn = Keys.none; 
@@ -22,21 +30,8 @@ public class Chord
 
 public class Chords : MonoBehaviour
 {
-    //private static Chords instance = null;
-
-    //public static Chords Instance
-    //{
-    //    get
-    //    {
-    //        if (instance == null)
-    //        {
-    //            instance = AddComponent<Chords>();
-    //        }
-    //        return instance;
-    //    }
-    //}
-
-
+    
+    
 
     Dictionary<ChordEnum, List<Note>> allChords = new Dictionary<ChordEnum, List<Note>>();
 
@@ -44,6 +39,9 @@ public class Chords : MonoBehaviour
 
     //Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>> cMajorChords = new Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>>();
 
+    const int keyOffset = 49;  // 49 or 48 bug here
+
+    public int GetKeyOffset() { return keyOffset ;}
 
     public Chord GetChordOfType(Keys key, ChordFunction function) // returns random chord in a given key that performs given function, (functional harmony)
     {
@@ -59,8 +57,18 @@ public class Chords : MonoBehaviour
             Debug.LogError("Functional type not recognised");
         }
 
-        chord = new Chord(chordname, key, function, allChords[chordname]);
-        return chord;
+
+        if (allChords.ContainsKey(chordname)) // just in case
+        {
+            chord = new Chord(chordname, key, function, allChords[chordname]);
+            return chord;
+        }
+        else
+        {
+            Debug.LogError("chord does not exist");
+            return null;
+        }
+        
              
     }
 
@@ -103,17 +111,17 @@ public class Chords : MonoBehaviour
 
         functionalChords[Keys.CMajor][ChordFunction.tonic] = new List<ChordEnum> {
             (ChordEnum)FunctionalCMajor.I1,       (ChordEnum)FunctionalCMajor.I2,     (ChordEnum)FunctionalCMajor.I3,     (ChordEnum)FunctionalCMajor.I4,
-            (ChordEnum)FunctionalCMajor.iii1,   (ChordEnum)FunctionalCMajor.iii2,   (ChordEnum)FunctionalCMajor.iii3,   (ChordEnum)FunctionalCMajor.iii4,
+            (ChordEnum)FunctionalCMajor.iii1,   (ChordEnum)FunctionalCMajor.iii2,   (ChordEnum)FunctionalCMajor.iii3,   
             (ChordEnum)FunctionalCMajor.vi1,     (ChordEnum)FunctionalCMajor.vi2,    (ChordEnum)FunctionalCMajor.vi3, 
         };
         
         functionalChords[Keys.CMajor][ChordFunction.subdominant] = new List<ChordEnum> {
-            (ChordEnum)FunctionalCMajor.IV1,       (ChordEnum)FunctionalCMajor.IV2,     (ChordEnum)FunctionalCMajor.IV3,     (ChordEnum)FunctionalCMajor.IV4,
-            (ChordEnum)FunctionalCMajor.ii1,       (ChordEnum)FunctionalCMajor.ii2,     (ChordEnum)FunctionalCMajor.ii3,     (ChordEnum)FunctionalCMajor.ii4, 
+            (ChordEnum)FunctionalCMajor.IV1,       (ChordEnum)FunctionalCMajor.IV2,     (ChordEnum)FunctionalCMajor.IV3,     
+            (ChordEnum)FunctionalCMajor.ii1,       (ChordEnum)FunctionalCMajor.ii2,     (ChordEnum)FunctionalCMajor.ii3,     
         }; 
         
         functionalChords[Keys.CMajor][ChordFunction.dominant] = new List<ChordEnum> {
-                  (ChordEnum)FunctionalCMajor.V1,             (ChordEnum)FunctionalCMajor.V2,          (ChordEnum)FunctionalCMajor.V3,      (ChordEnum)FunctionalCMajor.V4,
+                  (ChordEnum)FunctionalCMajor.V1,             (ChordEnum)FunctionalCMajor.V2,          (ChordEnum)FunctionalCMajor.V3,     
             (ChordEnum)FunctionalCMajor.viiidim1,       (ChordEnum)FunctionalCMajor.viiidim2,     (ChordEnum)FunctionalCMajor.viiidim3,      
         };
 
@@ -123,6 +131,7 @@ public class Chords : MonoBehaviour
 
 
 }
+
 
 public enum Keys
 {
@@ -175,10 +184,10 @@ public enum FunctionalCMajor
 
     //C4
     I4 = ChordEnum.C4,
-    ii4 = ChordEnum.Dm4,
-    iii4 = ChordEnum.Em4,
-    IV4 = ChordEnum.F4,
-    V4 = ChordEnum.G4,
+    //ii4 = ChordEnum.Dm4,
+    //iii4 = ChordEnum.Em4,
+    //IV4 = ChordEnum.F4,
+    //V4 = ChordEnum.G4,
 
 }
 
@@ -202,7 +211,7 @@ public enum ChordEnum
     F2,
     G2,
 
-    // C2 Major key
+    // C3 Major key
     Am3,
     Bdim3,
     C3,
@@ -211,14 +220,14 @@ public enum ChordEnum
     F3,
     G3,
 
-    // C2 Major key
+    // C4 Major key
     Am4,
     Bdim4,
     C4,
-    Dm4,
-    Em4,
-    F4,
-    G4,
+    //Dm4,
+    //Em4,
+    //F4,
+    //G4,
 
 }
 
