@@ -79,6 +79,8 @@ public class ChordSender : MonoBehaviour
                 chickens.Remove(chick);
             }
         }
+
+
         switch (state)
         {
             case State.initial:
@@ -103,7 +105,7 @@ public class ChordSender : MonoBehaviour
 
             case State.generatingNextProgression:
                 GenerateNextProgression();
-                state = State.sendingChord;
+                state = State.chickensRunning;
                 break;
 
             case State.waitingForNextChord:
@@ -119,11 +121,11 @@ public class ChordSender : MonoBehaviour
                 }
                 else
                 {
-                    state = State.sendingChord;
+                    state = State.chickensRunning;
                 }
                 break;
 
-            case State.sendingChord:
+            case State.chickensRunning:
                 Chord chord = chordQueue.Dequeue();
                 timeWhenKeyShouldHaveBeenPressed = Time.time;
 
@@ -190,7 +192,8 @@ public class ChordSender : MonoBehaviour
         waitingForNextProgression,
         generatingNextProgression,
         waitingForNextChord,
-        sendingChord,
+        foxesRunning,
+        chickensRunning,
 
     }
 

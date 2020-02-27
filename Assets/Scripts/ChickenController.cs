@@ -64,7 +64,6 @@ public class ChickenController : MonoBehaviour
                         if (onGround)
                         {
                             Jump();
-                            GameManager.Instance.score++;
                         }
                         jumping = true;
 
