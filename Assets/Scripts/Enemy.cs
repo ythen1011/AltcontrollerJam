@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 // fox movement 
 
@@ -8,6 +10,9 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private Transform Fox;
     [SerializeField] private Transform respawnPoint;
+
+   // public int Score;
+    public TextMeshProUGUI ScoreText;
 
     public float moveSpeed = 5f;
     public bool moveForward = true;
@@ -38,11 +43,15 @@ public class Enemy : MonoBehaviour
 
             if (pos.z <= -10)
             {
-                pos.z = 10;
+             //   Score++;
+              //  ScoreText.text = "Score: " + Score.ToString();
+                pos = respawnPoint.transform.position;
             }
+            //if 
+            
         }
         transform.localPosition = pos;
-        Fox.transform.position = respawnPoint.transform.position;
+       
 
     }
 }
