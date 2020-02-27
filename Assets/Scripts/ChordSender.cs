@@ -24,7 +24,7 @@ public class ChordSender : MonoBehaviour
     [SerializeField] List<Chord> chordQueueVeiw = new List<Chord>();
     
     Queue<Chord> chordQueue = new Queue<Chord>(); // queues cannot be veiwed in editor
-    public GameObject ___fox___;
+    public GameObject fox;
     public Keyboard piano;
 
     GameObject foxCheck = null;
@@ -48,7 +48,7 @@ public class ChordSender : MonoBehaviour
         {
             
             Vector3 position = piano.keys[piano.KeymappingNoteToKey[n]].transform.position + new Vector3(0, 4, -2);
-            foxCheck = Instantiate(___fox___,position,Quaternion.identity);
+            foxCheck = Instantiate(fox,position,Quaternion.identity);
             Debug.Log(n.ToString() + " "+ (int)piano.KeymappingNoteToKey[n]);
           
         }

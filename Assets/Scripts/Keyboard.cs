@@ -14,8 +14,8 @@ public class Keyboard : MonoBehaviour
     List<KeyIndex> indices = new List<KeyIndex>();
     List<Note> notes = new List<Note>();
     [SerializeField] List<GameObject> keyObjects = new List<GameObject>();
-    [SerializeField] Material white;
-    [SerializeField] Material red;
+    List<Material> upMat = new List<Material>();
+    [SerializeField] Material redMat;
     const int transpose = -12;
 
    // InputDevice piano;
@@ -27,6 +27,7 @@ public class Keyboard : MonoBehaviour
         for(int i = 0; i < numberOfKeys; i++)
         {
             keyObjects.Add(GameObject.Find("Key" + i));
+            upMat.Add( keyObjects[i].GetComponent<MeshRenderer>().material);
         }
 
         System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex));
@@ -94,7 +95,7 @@ public class Keyboard : MonoBehaviour
             {
                 if (audio.isPlaying)
                 {
-                    keyObjects[(int)i].GetComponent<MeshRenderer>().material = red;
+                    keyObjects[(int)i].GetComponent<MeshRenderer>().material = redMat;
                     //if(audio.time > audio.clip.length * 0.8f)
                     //{
                     //    audio.time -= Time.deltaTime*0.9f;
@@ -103,7 +104,7 @@ public class Keyboard : MonoBehaviour
             }
             else
             {
-                keyObjects[(int)i].GetComponent<MeshRenderer>().material = white;
+                keyObjects[(int)i].GetComponent<MeshRenderer>().material = upMat[(int)i];
                 
               
 
