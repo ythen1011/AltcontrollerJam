@@ -51,7 +51,7 @@ public class ChickenController : MonoBehaviour
 
         // over a key
         RaycastHit[] hitObjects;
-        hitObjects = Physics.RaycastAll(transform.position + new Vector3(0, 0, 0), Vector3.down);
+        hitObjects = Physics.RaycastAll(transform.position + new Vector3(0, 1, 0), Vector3.down);
         if (hitObjects.Length != 0)
         {
             foreach(RaycastHit hit in hitObjects)
@@ -61,10 +61,10 @@ public class ChickenController : MonoBehaviour
                 {
                     if(hit.collider.gameObject.GetComponent<KeyControl>().justPressed == true)
                     {
-                        Debug.Log(hit.collider.gameObject.GetComponent<KeyControl>().justPressed);   
                         if (onGround)
                         {
                             Jump();
+                            GameManager.Instance.score++;
                         }
                         jumping = true;
 
@@ -73,6 +73,22 @@ public class ChickenController : MonoBehaviour
                     {
                         jumping = false;
                     }
+                }
+            }
+
+        }
+        
+        // on a key
+        RaycastHit[] hitObjects2;
+        hitObjects2 = Physics.RaycastAll(transform.position + new Vector3(0, 0, 0), Vector3.down,0.1f);
+        if (hitObjects.Length != 0)
+        {
+            foreach(RaycastHit hit in hitObjects2)
+            {
+
+                if (hit.collider.gameObject.tag == "Key")
+                {
+                    onGround = true;
                 }
             }
 
