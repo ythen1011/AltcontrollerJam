@@ -56,28 +56,7 @@ public class Keyboard : MonoBehaviour
     void Update()
     {
 
-        //foreach(KeyIndex i in Keymapping.Keys)
-        //{
-        //    float strenght = MidiMaster.GetKey(MidiChannel.All, (int)Keymapping[i]);
-        //    if (strenght > 0.05f)
-        //    {
-        //        keys[(int)i].GetComponent<MeshRenderer>().material = red;
-
-        //        if(MidiMaster.GetKeyDown(MidiChannel.All, (int)Keymapping[i]))
-        //        {
-        //            AudioSource audio = keys[(int)i].GetComponent<AudioSource>();
-        //            audio.volume = strenght;
-        //            audio.pitch = Mathf.Pow(2, ((int)i + transpose) / 12f); // pitch shift for the key
-        //            audio.Play();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        keys[(int)i].GetComponent<MeshRenderer>().material = white;
-
-        //    }
-        //}
-
+       
 
         foreach (KeyIndex i in KeymappingKeyToNote.Keys)
         {
@@ -96,10 +75,7 @@ public class Keyboard : MonoBehaviour
                 if (audio.isPlaying)
                 {
                     keyObjects[(int)i].GetComponent<MeshRenderer>().material = redMat;
-                    //if(audio.time > audio.clip.length * 0.8f)
-                    //{
-                    //    audio.time -= Time.deltaTime*0.9f;
-                    //}
+                    
                 }
             }
             else
