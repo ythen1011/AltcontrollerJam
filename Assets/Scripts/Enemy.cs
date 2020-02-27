@@ -46,6 +46,7 @@ public class Enemy : MonoBehaviour
              //   Score++;
               //  ScoreText.text = "Score: " + Score.ToString();
                 pos = respawnPoint.transform.position;
+                GameManager.Instance.score++;
             }
             //if 
             
