@@ -15,7 +15,7 @@ public class ChordSender : MonoBehaviour
 
     [SerializeField] Chords chordController ;
 
-    [SerializeField] float timeWhenLastChordWasSent = 0;
+    [SerializeField] float timeWhenKeyShouldHaveBeenPressed = 0;
 
     State state = State.initial;
 
@@ -24,14 +24,15 @@ public class ChordSender : MonoBehaviour
     [SerializeField] List<Chord> chordQueueVeiw = new List<Chord>();
     
     Queue<Chord> chordQueue = new Queue<Chord>(); // queues cannot be veiwed in editor
-    public GameObject yellow;
-    public List<GameObject> keys;
+    public GameObject ___fox___;
+    public Keyboard piano;
 
+    GameObject foxCheck = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        Random.InitState((int)Time.time*10000); // steed random
+        //Random.InitState((int)Time.time*10000); // steed random
 
         currentProgression = (Progression)Random.Range(1, (int)Progression.count - 1); // get random progression
         
@@ -42,12 +43,13 @@ public class ChordSender : MonoBehaviour
 
     public void createYellow(Chord chord)
     {
-       for (int i = 0; i < chord.notes.Count; i++)
+       Debug.LogWarning(chord.chord.ToString());
+       foreach (Note n in chord.notes)
         {
-            Instantiate(yellow, keys[(int)chord.notes[i] - chordController.GetKeyOffset()].transform.position + new Vector3(0,4,0),Quaternion.identity );
-            //Debug.Log((int)chord.notes[i] - chordController.GetKeyOffset());
-          // Instantiate(yellow, keys[0].transform.position + new Vector3(0, 4, 0), Quaternion.identity);
-           // noteObject.transform.position = new Vector3(keys[(int)chord.notes[i] - chordController.GetKeyOffset()].transform.position.x, 4, 0);
+            
+            Vector3 position = piano.keys[piano.KeymappingNoteToKey[n]].transform.position + new Vector3(0, 4, -2);
+            foxCheck = Instantiate(___fox___,position,Quaternion.identity);
+            Debug.Log(n.ToString() + " "+ (int)piano.KeymappingNoteToKey[n]);
           
         }
 
@@ -63,7 +65,12 @@ public class ChordSender : MonoBehaviour
                 break;
 
             case State.waitingForNextProgression:
-                if(timeWhenLastChordWasSent + timeBetweenProgressions > Time.time)
+                if (foxCheck != null) // chord still falling
+                {
+                    timeWhenKeyShouldHaveBeenPressed = Time.time;
+                    break;
+                }
+                if (timeWhenKeyShouldHaveBeenPressed + timeBetweenProgressions > Time.time)
                 {
                     break;
                 }
@@ -79,7 +86,13 @@ public class ChordSender : MonoBehaviour
                 break;
 
             case State.waitingForNextChord:
-                if (timeWhenLastChordWasSent + timeBetweenChords > Time.time)
+                if (foxCheck != null) // chord still falling
+                {
+                    timeWhenKeyShouldHaveBeenPressed = Time.time;
+                    break;
+                }
+
+                if (timeWhenKeyShouldHaveBeenPressed + timeBetweenChords > Time.time) 
                 {
                     break;
                 }
@@ -91,14 +104,14 @@ public class ChordSender : MonoBehaviour
 
             case State.sendingChord:
                 Chord chord = chordQueue.Dequeue();
-                timeWhenLastChordWasSent = Time.time;
+                timeWhenKeyShouldHaveBeenPressed = Time.time;
 
-                //createYellow(chord);
+                createYellow(chord);
 
-                Debug.Log(chord.chord.ToString());
 
                 if (chordQueue.Count > 0)
                 {
+                    
                     state = State.waitingForNextChord;
                 }
                 else

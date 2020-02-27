@@ -8,10 +8,12 @@ public class Keyboard : MonoBehaviour
 {
     public const int numberOfKeys = 32;
 
-    public Dictionary<KeyIndex, Note> Keymapping = new Dictionary<KeyIndex, Note>();
+    public Dictionary<KeyIndex, Note> KeymappingKeyToNote = new Dictionary<KeyIndex, Note>();
+    public Dictionary<Note,KeyIndex> KeymappingNoteToKey = new Dictionary<Note,KeyIndex>();
+    public Dictionary<KeyIndex, GameObject> keys = new Dictionary<KeyIndex, GameObject>();
     List<KeyIndex> indices = new List<KeyIndex>();
     List<Note> notes = new List<Note>();
-    [SerializeField] List<GameObject> keys = new List<GameObject>();
+    [SerializeField] List<GameObject> keyObjects = new List<GameObject>();
     [SerializeField] Material white;
     [SerializeField] Material red;
     const int transpose = -12;
@@ -24,13 +26,14 @@ public class Keyboard : MonoBehaviour
         
         for(int i = 0; i < numberOfKeys; i++)
         {
-            keys.Add(GameObject.Find("Key" + i));
+            keyObjects.Add(GameObject.Find("Key" + i));
         }
 
-        System.Array indecesArray = KeyIndex.GetValues(typeof(KeyIndex));
-        foreach(KeyIndex i in indecesArray)
+        System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex));
+        foreach(KeyIndex i in indicesArray)
         {
             indices.Add(i);
+            keys[i] = keyObjects[(int)i];
         }
 
         System.Array notesArray = Note.GetValues(typeof(Note));
@@ -39,10 +42,11 @@ public class Keyboard : MonoBehaviour
             notes.Add(n);
         }
 
-        int length = indecesArray.Length < notesArray.Length ? indecesArray.Length : notesArray.Length;
+        int length = indicesArray.Length < notesArray.Length ? indicesArray.Length : notesArray.Length;
         for(int i = 0; i < length; i++)
         {
-            Keymapping[indices[i]] = notes[i];
+            KeymappingKeyToNote[indices[i]] = notes[i];
+            KeymappingNoteToKey[notes[i]] = indices[i];
         }
         
     }
@@ -74,11 +78,11 @@ public class Keyboard : MonoBehaviour
         //}
 
 
-        foreach (KeyIndex i in Keymapping.Keys)
+        foreach (KeyIndex i in KeymappingKeyToNote.Keys)
         {
-            AudioSource audio = keys[(int)i].GetComponent<AudioSource>();
-            float strenght = MidiMaster.GetKey(MidiChannel.All, (int)Keymapping[i]);
-            if (MidiMaster.GetKeyDown(MidiChannel.All, (int)Keymapping[i]))
+            AudioSource audio = keyObjects[(int)i].GetComponent<AudioSource>();
+            float strenght = MidiMaster.GetKey(MidiChannel.All, (int)KeymappingKeyToNote[i]);
+            if (MidiMaster.GetKeyDown(MidiChannel.All, (int)KeymappingKeyToNote[i]))
             {
                 audio.volume = strenght;
                 audio.pitch = Mathf.Pow(2, ((int)i + transpose) / 12f); // pitch shift for the key
@@ -86,11 +90,11 @@ public class Keyboard : MonoBehaviour
                 audio.Play();
             }
 
-            if (audio.isPlaying&& MidiMaster.GetKey(MidiChannel.All, (int)Keymapping[i]) != 0)
+            if (audio.isPlaying&& MidiMaster.GetKey(MidiChannel.All, (int)KeymappingKeyToNote[i]) != 0)
             {
                 if (audio.isPlaying)
                 {
-                    keys[(int)i].GetComponent<MeshRenderer>().material = red;
+                    keyObjects[(int)i].GetComponent<MeshRenderer>().material = red;
                     //if(audio.time > audio.clip.length * 0.8f)
                     //{
                     //    audio.time -= Time.deltaTime*0.9f;
@@ -99,12 +103,12 @@ public class Keyboard : MonoBehaviour
             }
             else
             {
-                keys[(int)i].GetComponent<MeshRenderer>().material = white;
+                keyObjects[(int)i].GetComponent<MeshRenderer>().material = white;
                 
               
 
             }
-            if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)Keymapping[i]))
+            if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)KeymappingKeyToNote[i]))
             {
                 audio.time = audio.clip.length * 0.8f;
             }
