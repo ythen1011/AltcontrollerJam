@@ -16,6 +16,13 @@ public class ChickenController : MonoBehaviour
     [SerializeField] Vector3 targetDirection;
     Rigidbody rb;
 
+    private bool onGround = true;
+    private bool jumping = false;
+    [Range(1, 10)]
+    [SerializeField] float jumpVelocity;
+    [SerializeField] float fallMultiplier = 2.5f;
+    [SerializeField] float lowJumpMultiplier = 2f; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +49,43 @@ public class ChickenController : MonoBehaviour
             transform.LookAt(Camera.main.transform.position);
         }
 
+        // over a key
+        RaycastHit[] hitObjects;
+        hitObjects = Physics.RaycastAll(transform.position + new Vector3(0, 0, 0), Vector3.down);
+        if (hitObjects.Length != 0)
+        {
+            foreach(RaycastHit hit in hitObjects)
+            {
+
+                if (hit.collider.gameObject.tag == "Key")
+                {
+                    if(hit.collider.gameObject.GetComponent<KeyControl>().justPressed == true)
+                    {
+                        Debug.Log(hit.collider.gameObject.GetComponent<KeyControl>().justPressed);   
+                        if (onGround)
+                        {
+                            Jump();
+                        }
+                        jumping = true;
+
+                    }
+                    else
+                    {
+                        jumping = false;
+                    }
+                }
+            }
+
+        }
+
+        //if (other.tag == "Key")
+        //{
+        //    if (other.GetComponent<KeyControl>().justPressed == true)
+        //    {
+        //        Jump();
+        //    }
+        //}
+
 
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
     }
@@ -50,9 +94,16 @@ public class ChickenController : MonoBehaviour
     private void FixedUpdate()
     {
         
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        }
+        else if (rb.velocity.y > 0 && !jumping)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+        }
         rb.MovePosition(rb.position + targetDirection * speed * Time.fixedDeltaTime);
 
-        
     }
 
     public void SetTarget(Vector3 pos)
@@ -64,18 +115,15 @@ public class ChickenController : MonoBehaviour
 
     public void Jump()
     {
-
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.tag == "Key")
+        Debug.Log(rb.velocity.y);
         {
-            if(other.GetComponent<KeyControl>().justPressed == true)
-            {
-                Jump();
-            }
+            if(rb.velocity.y < 1)
+            GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
+            onGround = false;
         }
     }
+
+   
+
 
 }

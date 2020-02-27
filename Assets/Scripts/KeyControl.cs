@@ -7,11 +7,11 @@ public class KeyControl : MonoBehaviour
 {
 
     public bool justPressed;
-    public Material defaultMat;
-    public Material redMat;
+    Material defaultMat;
+    Material redMat;
     MeshRenderer renderer;
     AudioSource audio;
-    public KeyIndex myIndex;
+    public KeyIndex note;
     Keyboard keyboard;
 
     // Start is called before the first frame update
@@ -20,27 +20,28 @@ public class KeyControl : MonoBehaviour
         audio = GetComponent<AudioSource>();
         keyboard = GetComponentInParent<Keyboard>();
         renderer = GetComponent<MeshRenderer>();
+        defaultMat = renderer.material;
         redMat = keyboard.redMat;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[myIndex]);
-        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[myIndex]))
+        float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]);
+        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
         {
             audio.volume = strenght;
-            audio.pitch = Mathf.Pow(2, ((int)myIndex + Keyboard.transpose) / 12f); // pitch shift for the key
+            audio.pitch = Mathf.Pow(2, ((int)note + Keyboard.transpose) / 12f); // pitch shift for the key
             audio.time = 0;
+            justPressed = true;
             audio.Play();
         }
 
-        if (audio.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[myIndex]) != 0)
+        if (audio.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]) != 0)
         {
             if (audio.isPlaying)
             {
                 renderer.material = redMat;
-                justPressed = true;
 
             }
         }
@@ -51,7 +52,7 @@ public class KeyControl : MonoBehaviour
 
 
         }
-        if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[myIndex]))
+        if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
         {
             audio.time = audio.clip.length * 0.8f;
         }

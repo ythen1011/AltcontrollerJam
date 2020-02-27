@@ -49,7 +49,7 @@ public class ChordSender : MonoBehaviour
 
     public void NewChord(Chord chord)
     {
-        //Debug.Log(chord.chord);
+        //Debug.Logg(chord.chord);
         while (chickens.Count < chord.notes.Count)
         {
             GameObject chicken = Instantiate(chickenObject, spawnPoint[chickens.Count%3].transform.position, Quaternion.identity);

@@ -28,7 +28,7 @@ public class Keyboard : MonoBehaviour
         for(int i = 0; i < numberOfKeys; i++)
         {
             keyObjects.Add(GameObject.Find("Key" + i));
-            keyObjects[i].GetComponent<KeyControl>().myIndex = (KeyIndex) i;
+            keyObjects[i].GetComponent<KeyControl>().note = (KeyIndex) i;
         }
 
         System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex));
