@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
 
 // hit detection collision check
 
@@ -8,6 +11,9 @@ public class Chicken : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Transform respawnPoint;
+
+   // public int Score;
+    public TextMeshProUGUI ScoreText;
 
     //public GameObject death;
     private void OnTriggerEnter(Collider Fox)
@@ -18,7 +24,12 @@ public class Chicken : MonoBehaviour
         // Destroy(Fox.gameObject);
         // this.gameObject.SetActive(false);
 
-        player.transform.position = respawnPoint.transform.position;      
+      //  Score -= 1;
+     //   ScoreText.text = "Score: " + Score.ToString();
+
+
+        player.transform.position = respawnPoint.transform.position;
+        Fox.transform.position = respawnPoint.transform.position;
     }
     
 

@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 // jump movement 
 
 public class Jump : MonoBehaviour
 {
-    public int Score;
-    public TextMeshProUGUI ScoreText;
     private float jumpSpeed = 5;
     private Rigidbody rigidBody;
     private bool onGround = true;
@@ -33,9 +29,7 @@ public class Jump : MonoBehaviour
             rigidBody.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
             onGround = false;
-            currentJump++;
-            Score++;
-            ScoreText.text = "Score: " + Score.ToString();
+            currentJump++;            
         }
     }
 

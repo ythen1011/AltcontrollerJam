@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 // player movement 
 
@@ -21,7 +23,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         UpdatePosition();
-        //CheckCollisons();
+        
     }
 
     private void UpdatePosition()
@@ -46,40 +48,19 @@ public class Player : MonoBehaviour
     }
 }
 
-    //private void CheckCollisons()
-  //  {
-       // bool isSafe = true;
+// private void CheckCollisons()
+//{
+    // bool isSafe = true;
 
-       // GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("CollidableObject");
-        //foreach (GameObject go in gameObjects)
-      //  {
-           // CollidableObject collidableObject = go.GetComponent<CollidableObject>();
+   // GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Fox");
+ //  {
+      //  CollidableObject collidableObject = go.GetComponent<Fox>();
 
-          //  if (collidableObject.isColliding(this.gameObject))
-      //      {
-             //   if (collidableObject.isSafe)
-       //         {
-              //      isSafe = true;
+       // if (collidableObject.isColliding(this.gameObject))
+       // {
+        //    Score--;
+        //    ScoreText.text = "Score: " + Score.ToString();
+        
+    
 
-               //     if (collidableObject.isFox)
-         //           {
-                 //       isSafe = false;
-            //            {
-                   //         PlayerDied();
-             //           }
 
-           //         }
-        //        } 
-        //    }
-     //   }
-   // }
-   // void PlayerDied()
- //   {
-   //     ResetPosition();
-   // }
-  //  void ResetPosition()
- //   {
-    //    transform.localPosition = originalPosition;
-
-  //  }
-//}
