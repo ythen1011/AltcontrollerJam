@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3287237176819161579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3287237176819161581}
+  - component: {fileID: 3287237176819161582}
+  - component: {fileID: 3287237176819161583}
+  m_Layer: 0
+  m_Name: ChordSender
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3287237176819161581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287237176819161579}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3287237176819161582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287237176819161579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac67a92835682814a892377af2af888f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3287237176819161583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287237176819161579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 314f93f0584385045bc9aecf2c8e6e2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenChords: 4.2
+  timeBetweenProgressions: 4.5
+  key: 1
+  chordController: {fileID: 3287237176819161582}
+  timeWhenKeyShouldHaveBeenPressed: 0
+  chordQueueVeiw: []
+  chickenObject: {fileID: 6416081919497145249, guid: 22f446a3759f3824d9cd7786d9f9eda9,
+    type: 3}
+  spawnPoint: {fileID: 0}
+  keyPositionOffset: {x: 0, y: 0.2, z: 0}
+  piano: {fileID: 0}
