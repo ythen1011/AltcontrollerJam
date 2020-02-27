@@ -147,3 +147,6 @@ MonoBehaviour:
   onTargetTolerance: 0.2
   target: {x: 0, y: 0, z: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+  jumpVelocity: 10
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
