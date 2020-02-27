@@ -5,34 +5,19 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    private static object Lock = new object();
-    private static GameManager instance;
-    public static GameManager Instance {
-        get { 
+    private static GameManager _instance;
 
-            lock (Lock)
-            {
-                if (Instance == null)
-                {
-                    // Search for existing instance.
-                    instance = (GameManager) FindObjectOfType(typeof(GameManager));
- 
-                    // Create new instance if one doesn't already exist.
-                    if (instance == null)
-                    {
-                        // Need to create a new GameObject to attach the singleton to.
-                        var singletonObject = new GameObject();
-                        instance = singletonObject.AddComponent<GameManager>();
-                        singletonObject.name = typeof(GameManager).ToString() + " (Singleton)";
- 
-                        // Make instance persistent.
-                        DontDestroyOnLoad(singletonObject);
-                    }
- 
-                }
-                return instance;
-                
-            }
+    public static GameManager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
         }
     }
 
