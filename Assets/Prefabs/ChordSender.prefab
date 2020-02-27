@@ -56,12 +56,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314f93f0584385045bc9aecf2c8e6e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenChords: 0.7
-  timeBetweenProgressions: 1.9
+  timeBetweenChords: 4.2
+  timeBetweenProgressions: 4.5
   key: 1
   chordController: {fileID: 3287237176819161582}
-  timeWhenLastChordWasSent: 0
+  timeWhenKeyShouldHaveBeenPressed: 0
   chordQueueVeiw: []
-  yellow: {fileID: 4364328302310042258, guid: 5a224d8622b42304ea1c63a39f7b2188, type: 3}
+  chickenObject: {fileID: 6416081919497145249, guid: 22f446a3759f3824d9cd7786d9f9eda9,
+    type: 3}
+  spawnPoint: {fileID: 0}
+  keyPositionOffset: {x: 0, y: 0.2, z: 0}
   piano: {fileID: 0}
-  DepracatedKeys: []

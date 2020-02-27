@@ -24,10 +24,16 @@ public class ChordSender : MonoBehaviour
     [SerializeField] List<Chord> chordQueueVeiw = new List<Chord>();
     
     Queue<Chord> chordQueue = new Queue<Chord>(); // queues cannot be veiwed in editor
-    public GameObject fox;
-    public Keyboard piano;
 
-    GameObject foxCheck = null;
+    [SerializeField] GameObject chickenObject;
+    [SerializeField] List<ChickenController> chickens = new List<ChickenController>();
+
+    [SerializeField] GameObject[] spawnPoint = new GameObject[3];
+    [SerializeField] Vector3 keyPositionOffset;
+
+
+    [SerializeField] Keyboard piano;
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,16 +47,18 @@ public class ChordSender : MonoBehaviour
     }
 
 
-    public void createYellow(Chord chord)
+    public void NewChord(Chord chord)
     {
-       Debug.LogWarning(chord.chord.ToString());
-       foreach (Note n in chord.notes)
+        //Debug.Log(chord.chord);
+        while (chickens.Count < chord.notes.Count)
         {
-            
-            Vector3 position = piano.keys[piano.KeymappingNoteToKey[n]].transform.position + new Vector3(0, 4, -2);
-            foxCheck = Instantiate(fox,position,Quaternion.identity);
-            Debug.Log(n.ToString() + " "+ (int)piano.KeymappingNoteToKey[n]);
-          
+            GameObject chicken = Instantiate(chickenObject, spawnPoint[chickens.Count%3].transform.position, Quaternion.identity);
+            chickens.Add(chicken.GetComponent<ChickenController>());
+        }
+       for(int i = 0; i < chord.notes.Count; i++)
+        {
+            Vector3 position = piano.keys[piano.KeymappingNoteToKey[chord.notes[i]]].transform.position + keyPositionOffset;
+            chickens[i].SetTarget(position);   
         }
 
     }
@@ -58,6 +66,19 @@ public class ChordSender : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(chickens.Count == 0)
+        {
+            // you loose
+        }
+
+        foreach(ChickenController chick in chickens)
+        {
+            if(chick == null)
+            {
+                chickens.Remove(chick);
+            }
+        }
         switch (state)
         {
             case State.initial:
@@ -65,7 +86,7 @@ public class ChordSender : MonoBehaviour
                 break;
 
             case State.waitingForNextProgression:
-                if (foxCheck != null) // chord still falling
+                if (false) // chord still falling
                 {
                     timeWhenKeyShouldHaveBeenPressed = Time.time;
                     break;
@@ -86,7 +107,7 @@ public class ChordSender : MonoBehaviour
                 break;
 
             case State.waitingForNextChord:
-                if (foxCheck != null) // chord still falling
+                if (false) // chord still falling
                 {
                     timeWhenKeyShouldHaveBeenPressed = Time.time;
                     break;
@@ -106,7 +127,7 @@ public class ChordSender : MonoBehaviour
                 Chord chord = chordQueue.Dequeue();
                 timeWhenKeyShouldHaveBeenPressed = Time.time;
 
-                createYellow(chord);
+                NewChord(chord);
 
 
                 if (chordQueue.Count > 0)

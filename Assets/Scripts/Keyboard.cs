@@ -15,8 +15,9 @@ public class Keyboard : MonoBehaviour
     List<Note> notes = new List<Note>();
     [SerializeField] List<GameObject> keyObjects = new List<GameObject>();
     List<Material> upMat = new List<Material>();
-    [SerializeField] Material redMat;
-    const int transpose = -12;
+    public Material redMat;
+    public const int transpose = -12;
+
 
    // InputDevice piano;
    
@@ -27,7 +28,7 @@ public class Keyboard : MonoBehaviour
         for(int i = 0; i < numberOfKeys; i++)
         {
             keyObjects.Add(GameObject.Find("Key" + i));
-            upMat.Add( keyObjects[i].GetComponent<MeshRenderer>().material);
+            keyObjects[i].GetComponent<KeyControl>().myIndex = (KeyIndex) i;
         }
 
         System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex));
@@ -55,43 +56,6 @@ public class Keyboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-       
-
-        foreach (KeyIndex i in KeymappingKeyToNote.Keys)
-        {
-            AudioSource audio = keyObjects[(int)i].GetComponent<AudioSource>();
-            float strenght = MidiMaster.GetKey(MidiChannel.All, (int)KeymappingKeyToNote[i]);
-            if (MidiMaster.GetKeyDown(MidiChannel.All, (int)KeymappingKeyToNote[i]))
-            {
-                audio.volume = strenght;
-                audio.pitch = Mathf.Pow(2, ((int)i + transpose) / 12f); // pitch shift for the key
-                audio.time = 0;
-                audio.Play();
-            }
-
-            if (audio.isPlaying&& MidiMaster.GetKey(MidiChannel.All, (int)KeymappingKeyToNote[i]) != 0)
-            {
-                if (audio.isPlaying)
-                {
-                    keyObjects[(int)i].GetComponent<MeshRenderer>().material = redMat;
-                    
-                }
-            }
-            else
-            {
-                keyObjects[(int)i].GetComponent<MeshRenderer>().material = upMat[(int)i];
-                
-              
-
-            }
-            if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)KeymappingKeyToNote[i]))
-            {
-                audio.time = audio.clip.length * 0.8f;
-            }
-
-        }
-       
         
     }
 

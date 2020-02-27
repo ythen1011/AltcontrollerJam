@@ -124,7 +124,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6416081919497145249}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1a087d23004f4cb49a2acb349689d439, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -145,7 +145,5 @@ MonoBehaviour:
   speed: 5
   skidDistance: 1
   onTargetTolerance: 0.2
-  cyl1: {fileID: 0}
-  cyl2: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
   targetDirection: {x: 0, y: 0, z: 0}
