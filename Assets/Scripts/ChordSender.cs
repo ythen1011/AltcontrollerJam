@@ -11,7 +11,7 @@ public class ChordSender : MonoBehaviour
     [Range(0.1f,10f)] [SerializeField] float timeBetweenChords;
     [Range(0.1f,10f)] [SerializeField] float timeBetweenProgressions;
 
-    [SerializeField] Keys key;
+    [SerializeField] MusicalKey key;
 
     [SerializeField] Chords chordController ;
 
@@ -45,7 +45,7 @@ public class ChordSender : MonoBehaviour
        for (int i = 0; i < chord.notes.Count; i++)
         {
             Instantiate(yellow, keys[(int)chord.notes[i] - chordController.GetKeyOffset()].transform.position + new Vector3(0,4,0),Quaternion.identity );
-            Debug.Log((int)chord.notes[i] - chordController.GetKeyOffset());
+            //Debug.Log((int)chord.notes[i] - chordController.GetKeyOffset());
           // Instantiate(yellow, keys[0].transform.position + new Vector3(0, 4, 0), Quaternion.identity);
            // noteObject.transform.position = new Vector3(keys[(int)chord.notes[i] - chordController.GetKeyOffset()].transform.position.x, 4, 0);
           
@@ -93,7 +93,7 @@ public class ChordSender : MonoBehaviour
                 Chord chord = chordQueue.Dequeue();
                 timeWhenLastChordWasSent = Time.time;
 
-                createYellow(chord);
+                //createYellow(chord);
 
                 Debug.Log(chord.chord.ToString());
 

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Chord 
 {
     
-    public Chord(ChordEnum _chord, Keys _key, ChordFunction _function, List<Note> _notes ){
+    public Chord(ChordEnum _chord, MusicalKey _key, ChordFunction _function, List<Note> _notes ){
         this.chord = _chord;
         this.keyThisChordIsIn = _key;
         this.functionWithinKey = _function;
@@ -22,7 +22,7 @@ public class Chord
 
     }
     public ChordEnum chord = ChordEnum.none;
-    public Keys keyThisChordIsIn = Keys.none; 
+    public MusicalKey keyThisChordIsIn = MusicalKey.none; 
     public ChordFunction functionWithinKey = ChordFunction.none;
     public List<Note> notes = null;
 }
@@ -35,15 +35,15 @@ public class Chords : MonoBehaviour
 
     Dictionary<ChordEnum, List<Note>> allChords = new Dictionary<ChordEnum, List<Note>>();
 
-    Dictionary<Keys,  Dictionary<ChordFunction, List<ChordEnum> >  > functionalChords = new Dictionary<Keys, Dictionary<ChordFunction, List<ChordEnum>>>();
+    Dictionary<MusicalKey,  Dictionary<ChordFunction, List<ChordEnum> >  > functionalChords = new Dictionary<MusicalKey, Dictionary<ChordFunction, List<ChordEnum>>>();
 
     //Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>> cMajorChords = new Dictionary<FunctionalCMajor, Dictionary<ChordEnum, List<Note>>>();
 
-    const int keyOffset = 49;  // 49 or 48 bug here
+    const int keyOffset = 48;  // 49 or 48 bug here
 
     public int GetKeyOffset() { return keyOffset ;}
 
-    public Chord GetChordOfType(Keys key, ChordFunction function) // returns random chord in a given key that performs given function, (functional harmony)
+    public Chord GetChordOfType(MusicalKey key, ChordFunction function) // returns random chord in a given key that performs given function, (functional harmony)
     {
         Chord chord;
         ChordEnum chordname = ChordEnum.none;
@@ -95,34 +95,34 @@ public class Chords : MonoBehaviour
         allChords[ChordEnum.Am3] = new List<Note> { Note.a3, Note.c3, Note.e3 };
         allChords[ChordEnum.Bdim3] = new List<Note> { Note.b3, Note.d3, Note.f3 };
         allChords[ChordEnum.C3] = new List<Note> { Note.c3, Note.e3, Note.g3 };
-        allChords[ChordEnum.Dm3] = new List<Note> { Note.d3, Note.f3, Note.a4 };
-        allChords[ChordEnum.Em3] = new List<Note> { Note.e3, Note.g3, Note.b4 };
-        allChords[ChordEnum.F3] = new List<Note> { Note.f3, Note.a4, Note.c4 };
-        allChords[ChordEnum.G3] = new List<Note> { Note.g3, Note.b4, Note.d4 };
+        //allChords[ChordEnum.Dm3] = new List<Note> { Note.d3, Note.f3, Note.a4 };
+        //allChords[ChordEnum.Em3] = new List<Note> { Note.e3, Note.g3, Note.b4 };
+        //allChords[ChordEnum.F3] = new List<Note> { Note.f3, Note.a4, Note.c4 };
+        //allChords[ChordEnum.G3] = new List<Note> { Note.g3, Note.b4, Note.d4 };
 
-        // C4 Major
-        allChords[ChordEnum.Am4] = new List<Note> { Note.a4, Note.c4, Note.e4 };
-        allChords[ChordEnum.Bdim4] = new List<Note> { Note.b4, Note.d4, Note.f4 };
-        allChords[ChordEnum.C4] = new List<Note> { Note.c4, Note.e4, Note.g4 };
+        //// C4 Major
+        //allChords[ChordEnum.Am4] = new List<Note> { Note.a4, Note.c4, Note.e4 };
+        //allChords[ChordEnum.Bdim4] = new List<Note> { Note.b4, Note.d4, Note.f4 };
+        //allChords[ChordEnum.C4] = new List<Note> { Note.c4, Note.e4, Note.g4 };
 
         // C Major functional chords
-        functionalChords[Keys.CMajor] = new Dictionary<ChordFunction, List<ChordEnum>>();
-        functionalChords[Keys.CMajor][ChordFunction.root] = new List<ChordEnum> {  ChordEnum.C1, ChordEnum.C2, ChordEnum.C3, ChordEnum.C4 };
+        functionalChords[MusicalKey.CMajor] = new Dictionary<ChordFunction, List<ChordEnum>>();
+        functionalChords[MusicalKey.CMajor][ChordFunction.root] = new List<ChordEnum> {  ChordEnum.C1, ChordEnum.C2, ChordEnum.C3,};
 
-        functionalChords[Keys.CMajor][ChordFunction.tonic] = new List<ChordEnum> {
-            (ChordEnum)FunctionalCMajor.I1,       (ChordEnum)FunctionalCMajor.I2,     (ChordEnum)FunctionalCMajor.I3,     (ChordEnum)FunctionalCMajor.I4,
-            (ChordEnum)FunctionalCMajor.iii1,   (ChordEnum)FunctionalCMajor.iii2,   (ChordEnum)FunctionalCMajor.iii3,   
-            (ChordEnum)FunctionalCMajor.vi1,     (ChordEnum)FunctionalCMajor.vi2,    (ChordEnum)FunctionalCMajor.vi3, 
+        functionalChords[MusicalKey.CMajor][ChordFunction.tonic] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMajor.I1,       (ChordEnum)FunctionalCMajor.I2,     (ChordEnum)FunctionalCMajor.I3,
+            (ChordEnum)FunctionalCMajor.iii1,   (ChordEnum)FunctionalCMajor.iii2,      
+            (ChordEnum)FunctionalCMajor.vi1,     (ChordEnum)FunctionalCMajor.vi2,    
         };
         
-        functionalChords[Keys.CMajor][ChordFunction.subdominant] = new List<ChordEnum> {
-            (ChordEnum)FunctionalCMajor.IV1,       (ChordEnum)FunctionalCMajor.IV2,     (ChordEnum)FunctionalCMajor.IV3,     
-            (ChordEnum)FunctionalCMajor.ii1,       (ChordEnum)FunctionalCMajor.ii2,     (ChordEnum)FunctionalCMajor.ii3,     
+        functionalChords[MusicalKey.CMajor][ChordFunction.subdominant] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMajor.IV1,       (ChordEnum)FunctionalCMajor.IV2,        
+            (ChordEnum)FunctionalCMajor.ii1,       (ChordEnum)FunctionalCMajor.ii2,        
         }; 
         
-        functionalChords[Keys.CMajor][ChordFunction.dominant] = new List<ChordEnum> {
-                  (ChordEnum)FunctionalCMajor.V1,             (ChordEnum)FunctionalCMajor.V2,          (ChordEnum)FunctionalCMajor.V3,     
-            (ChordEnum)FunctionalCMajor.viiidim1,       (ChordEnum)FunctionalCMajor.viiidim2,     (ChordEnum)FunctionalCMajor.viiidim3,      
+        functionalChords[MusicalKey.CMajor][ChordFunction.dominant] = new List<ChordEnum> {
+                  (ChordEnum)FunctionalCMajor.V1,             (ChordEnum)FunctionalCMajor.V2,     
+            (ChordEnum)FunctionalCMajor.viiidim1,       (ChordEnum)FunctionalCMajor.viiidim2,       
         };
 
 
@@ -133,7 +133,7 @@ public class Chords : MonoBehaviour
 }
 
 
-public enum Keys
+public enum MusicalKey
 {
     none = 0,
 
@@ -175,15 +175,15 @@ public enum FunctionalCMajor
 
     //C3
     I3 = ChordEnum.C3,
-    ii3 = ChordEnum.Dm3,
-    iii3 = ChordEnum.Em3,
-    IV3 = ChordEnum.F3,
-    V3 = ChordEnum.G3,
-    vi3 = ChordEnum.Am4,
-    viiidim3 = ChordEnum.Bdim4,
+    //ii3 = ChordEnum.Dm3,
+    //iii3 = ChordEnum.Em3,
+    //IV3 = ChordEnum.F3,
+    //V3 = ChordEnum.G3,
+    //vi3 = ChordEnum.Am4,
+    //viiidim3 = ChordEnum.Bdim4,
 
-    //C4
-    I4 = ChordEnum.C4,
+    ////C4
+    //I4 = ChordEnum.C4,
     //ii4 = ChordEnum.Dm4,
     //iii4 = ChordEnum.Em4,
     //IV4 = ChordEnum.F4,
@@ -215,15 +215,15 @@ public enum ChordEnum
     Am3,
     Bdim3,
     C3,
-    Dm3,
-    Em3,
-    F3,
-    G3,
+    //Dm3,
+    //Em3,
+    //F3,
+    //G3,
 
-    // C4 Major key
-    Am4,
-    Bdim4,
-    C4,
+    //// C4 Major key
+    //Am4,
+    //Bdim4,
+    //C4,
     //Dm4,
     //Em4,
     //F4,
@@ -235,7 +235,7 @@ public enum ChordEnum
 
 public enum Note
 {
-    none = 0,
+    
 
     c1 = 48,
     cs1 = 49,
@@ -284,24 +284,25 @@ public enum Note
     fs3 = 54 + 24,
     gb3 = 54 + 24,
     g3 = 55 + 24,
-    gs3 = 56 + 24,
-    ab4 = 56 + 24,
-    a4 = 57 + 24,
-    as4 = 58 + 24,
-    bb4 = 58 + 24,
-    b4 = 59 + 24,
 
-    c4 = 48 + 36, // 84
-    cs4 = 49 + 36,
-    db4 = 49 + 36,
-    d4 = 50 + 36,
-    ds4 = 51 + 36,
-    eb4 = 51 + 36,
-    e4 = 52 + 36,
-    f4 = 53 + 36,
-    fs4 = 54 + 36,
-    gb4 = 54 + 36,
-    g4 = 55 + 36,
+    //gs3 = 56 + 24,
+    //ab4 = 56 + 24,
+    //a4 = 57 + 24,
+    //as4 = 58 + 24,
+    //bb4 = 58 + 24,
+    //b4 = 59 + 24,
+
+    //c4 = 48 + 36, // 84
+    //cs4 = 49 + 36,
+    //db4 = 49 + 36,
+    //d4 = 50 + 36,
+    //ds4 = 51 + 36,
+    //eb4 = 51 + 36,
+    //e4 = 52 + 36,
+    //f4 = 53 + 36,
+    //fs4 = 54 + 36,
+    //gb4 = 54 + 36,
+    //g4 = 55 + 36,
 }
 
 
