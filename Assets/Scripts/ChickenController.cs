@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChickenController : MonoBehaviour
 {
-    [SerializeField] float speed;
+    [Range(1, 10)] [SerializeField] float speed;
 
     [SerializeField] float skidDistance = 1f;
     [SerializeField] float onTargetTolerance = 0.2f;
@@ -21,12 +21,17 @@ public class ChickenController : MonoBehaviour
     [Range(1, 10)]
     [SerializeField] float jumpVelocity;
     [SerializeField] float fallMultiplier = 2.5f;
-    [SerializeField] float lowJumpMultiplier = 2f; 
+    [SerializeField] float lowJumpMultiplier = 2f;
+
+    bool overFox = false;
+
+    public chickenState state;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        state = chickenState.runningToChord;
     }
 
     // Update is called once per frame
@@ -39,14 +44,19 @@ public class ChickenController : MonoBehaviour
         {
             targetDirection.Normalize();
             transform.LookAt(target);
+            state = chickenState.runningToChord;
+
         }
         else if(targetDirection.magnitude < skidDistance && targetDirection.magnitude > onTargetTolerance+0.1)
         {
             transform.LookAt(target);
+            state = chickenState.inLocation;
 
         } else if(targetDirection.magnitude < onTargetTolerance)
         {
             transform.LookAt(Camera.main.transform.position);
+            state = chickenState.inLocation;
+
         }
 
         // over a key
@@ -73,6 +83,13 @@ public class ChickenController : MonoBehaviour
                         jumping = false;
                     }
                 }
+                if(hit.collider.tag == "Fox")
+                {
+                    if (onGround == false)
+                    {
+                        overFox = true;
+                    }
+                }
             }
 
         }
@@ -80,7 +97,7 @@ public class ChickenController : MonoBehaviour
         // on a key
         RaycastHit[] hitObjects2;
         hitObjects2 = Physics.RaycastAll(transform.position + new Vector3(0, 0, 0), Vector3.down,0.1f);
-        if (hitObjects.Length != 0)
+        if (hitObjects2.Length != 0)
         {
             foreach(RaycastHit hit in hitObjects2)
             {
@@ -88,6 +105,11 @@ public class ChickenController : MonoBehaviour
                 if (hit.collider.gameObject.tag == "Key")
                 {
                     onGround = true;
+                    if (overFox)
+                    {
+                        overFox = false;
+                        GameManager.Instance.JumpedOverFox();
+                    }
                 }
             }
 
@@ -102,7 +124,7 @@ public class ChickenController : MonoBehaviour
         //}
 
 
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0); // fix rotation to only y
     }
 
 
@@ -130,7 +152,6 @@ public class ChickenController : MonoBehaviour
 
     public void Jump()
     {
-        Debug.Log(rb.velocity.y);
         {
             if(rb.velocity.y < 1)
             GetComponent<Rigidbody>().velocity = Vector3.up * jumpVelocity;
@@ -139,6 +160,20 @@ public class ChickenController : MonoBehaviour
     }
 
    
+    public enum chickenState
+    {
+        runningToChord,
+        inLocation,
+        toDelete,
+    }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Fox")
+        {
+            state = chickenState.toDelete;
+        }
+    }
 
 }

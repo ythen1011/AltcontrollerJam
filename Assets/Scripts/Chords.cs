@@ -50,7 +50,7 @@ public class Chords : MonoBehaviour
 
         if (functionalChords[key].ContainsKey(function)) // this should always pass, just to be safe
         {
-            chordname = functionalChords[key][function][Random.Range((int)0, functionalChords[key][function].Count-1)]; // get a random chord of this function
+            chordname = functionalChords[key][function][Random.Range((int)0, functionalChords[key][function].Count)]; // get a random chord of this function
         }
         else
         {
@@ -77,7 +77,7 @@ public class Chords : MonoBehaviour
 
         // C1 Major
         allChords[ChordEnum.C1] = new List<Note> { Note.c1, Note.e1, Note.g1 };
-        allChords[ChordEnum.Dm1] = new List<Note> { Note.d1, Note.f2, Note.a2 };
+        allChords[ChordEnum.Dm1] = new List<Note> { Note.d1, Note.f1, Note.a2 };
         allChords[ChordEnum.Em1] = new List<Note> { Note.e1, Note.g1, Note.b2 };
         allChords[ChordEnum.F1] = new List<Note> { Note.f1, Note.a2, Note.c2 };
         allChords[ChordEnum.G1] = new List<Note> { Note.g1, Note.b2, Note.d2 };

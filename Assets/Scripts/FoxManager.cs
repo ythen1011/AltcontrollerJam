@@ -26,24 +26,49 @@ public class FoxManager : MonoBehaviour
     [SerializeField] GameObject foxObject;
     [SerializeField] List<GameObject> foxSpawnPoint = new List<GameObject>();
 
+    public List<GameObject> foxList = new List<GameObject>();
+
+    ChordSender chordSender;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        chordSender = GetComponentInChildren<ChordSender>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        foxList.RemoveAll(fox => fox == null);
+        foreach (GameObject fox in foxList)
+        {
+            if (fox.GetComponent<FoxController>().state == FoxController.foxState.toDelete)
+            {
+                Destroy(fox);
+            }
+        }
+        foxList.RemoveAll(fox => fox == null);
     }
+
+
 
     public void GenerateFoxes(List<ChickenController> chickens)
     {
         foreach (ChickenController chick in chickens)
         {
             Debug.Assert(foxSpawnPoint.Count > 0);
-            GameObject fox = Instantiate(foxObject, foxSpawnPoint[Random.Range(0, foxSpawnPoint.Count - 1)].transform.position, Quaternion.identity);
+            int index = Random.Range(0, foxSpawnPoint.Count);
+            GameObject foxObject = Instantiate(this.foxObject, foxSpawnPoint[index].transform.position, Quaternion.identity);
+            foxList.Add(foxObject);
+            FoxController fox = foxObject.GetComponent<FoxController>();
+            fox.targetChicken = chick.gameObject;
+            fox.state = FoxController.foxState.chaseChicken;
         }
     }
+
+    public bool GotAnyFoxes()
+    {
+        return foxList.Count > 0;
+    }
+
 }
