@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform Fox;
     [SerializeField] private Transform respawnPoint;
 
-   // public int Score;
+    public int Score;
     public TextMeshProUGUI ScoreText;
 
     public float moveSpeed = 5f;
@@ -43,9 +43,10 @@ public class Enemy : MonoBehaviour
 
             if (pos.z <= -10)
             {
-             //   Score++;
-              //  ScoreText.text = "Score: " + Score.ToString();
+                Score++;
+                ScoreText.text = "Score: " + Score.ToString();
                 pos = respawnPoint.transform.position;
+               // GameManager.Instance.score++;       when used score in inspector +3 each time fox passes 
             }
             //if 
             
