@@ -65,7 +65,8 @@ public class Chords : MonoBehaviour
         }
         else
         {
-            Debug.LogError("chord does not exist");
+
+            Debug.LogError("chord does not exist: " + chordname.ToString());
             return null;
         }
         
@@ -75,37 +76,81 @@ public class Chords : MonoBehaviour
     private void Start()
     {
 
+        // C Major
+
         // C1 Major
-        allChords[ChordEnum.C1] = new List<Note> { Note.c1, Note.e1, Note.g1 };
+        allChords[ChordEnum.C1] = new List<Note> { Note.c1, Note.e1, Note.g1  };
         allChords[ChordEnum.Dm1] = new List<Note> { Note.d1, Note.f1, Note.a2 };
         allChords[ChordEnum.Em1] = new List<Note> { Note.e1, Note.g1, Note.b2 };
-        allChords[ChordEnum.F1] = new List<Note> { Note.f1, Note.a2, Note.c2 };
-        allChords[ChordEnum.G1] = new List<Note> { Note.g1, Note.b2, Note.d2 };
+        allChords[ChordEnum.F1] = new List<Note> { Note.f1, Note.a2, Note.c2  };
+        allChords[ChordEnum.G1] = new List<Note> { Note.g1, Note.b2, Note.d2  };
 
         // C2 Major
-        allChords[ChordEnum.Am2] = new List<Note> { Note.a2, Note.c2, Note.e2 };
-        allChords[ChordEnum.Bdim2] = new List<Note> { Note.b2, Note.d2, Note.f2 };
-        allChords[ChordEnum.C2] = new List<Note> { Note.c2, Note.e2, Note.g2 };
-        allChords[ChordEnum.Dm2] = new List<Note> { Note.d2, Note.f2, Note.a3 };
-        allChords[ChordEnum.Em2] = new List<Note> { Note.e2, Note.g2, Note.b3 };
-        allChords[ChordEnum.F2] = new List<Note> { Note.f2, Note.a3, Note.c3 };
-        allChords[ChordEnum.G2] = new List<Note> { Note.g2, Note.b3, Note.d3 };
+        allChords[ChordEnum.Am2] = new List<Note> { Note.a2, Note.c2, Note.e2    };
+        allChords[ChordEnum.Bdim2] = new List<Note> { Note.b2, Note.d2, Note.f2  };
+        allChords[ChordEnum.C2] = new List<Note> { Note.c2, Note.e2, Note.g2     };
+        allChords[ChordEnum.Dm2] = new List<Note> { Note.d2, Note.f2, Note.a3    };
+        allChords[ChordEnum.Em2] = new List<Note> { Note.e2, Note.g2, Note.b3    };
+        allChords[ChordEnum.F2] = new List<Note> { Note.f2, Note.a3, Note.c3     };
+        allChords[ChordEnum.G2] = new List<Note> { Note.g2, Note.b3, Note.d3     };
 
         // C3 Major
-        allChords[ChordEnum.Am3] = new List<Note> { Note.a3, Note.c3, Note.e3 };
-        allChords[ChordEnum.Bdim3] = new List<Note> { Note.b3, Note.d3, Note.f3 };
-        allChords[ChordEnum.C3] = new List<Note> { Note.c3, Note.e3, Note.g3 };
-        //allChords[ChordEnum.Dm3] = new List<Note> { Note.d3, Note.f3, Note.a4 };
-        //allChords[ChordEnum.Em3] = new List<Note> { Note.e3, Note.g3, Note.b4 };
-        //allChords[ChordEnum.F3] = new List<Note> { Note.f3, Note.a4, Note.c4 };
-        //allChords[ChordEnum.G3] = new List<Note> { Note.g3, Note.b4, Note.d4 };
+        allChords[ChordEnum.Am3] = new List<Note> { Note.a3, Note.c3, Note.e3,  };
+        allChords[ChordEnum.Bdim3] = new List<Note> { Note.b3, Note.d3, Note.f3 };  
+        allChords[ChordEnum.C3] = new List<Note> { Note.c3, Note.e3, Note.g3 }; 
+        
 
-        //// C4 Major
-        //allChords[ChordEnum.Am4] = new List<Note> { Note.a4, Note.c4, Note.e4 };
-        //allChords[ChordEnum.Bdim4] = new List<Note> { Note.b4, Note.d4, Note.f4 };
-        //allChords[ChordEnum.C4] = new List<Note> { Note.c4, Note.e4, Note.g4 };
+        // C Major 7ths
+
+        // C1 Major 7ths
+         allChords[ChordEnum.C71] = new List<Note> { Note.c1, Note.e1, Note.g1 , Note.b2 };
+        allChords[ChordEnum.Dm71] = new List<Note> { Note.d1, Note.f1, Note.a2, Note.c2 };
+        allChords[ChordEnum.Em71] = new List<Note> { Note.e1, Note.g1, Note.b2, Note.d2 };
+         allChords[ChordEnum.F71] = new List<Note> { Note.f1, Note.a2, Note.c2 , Note.e2 };
+         allChords[ChordEnum.G71] = new List<Note> { Note.g1, Note.b2, Note.d2 , Note.f2 };
+
+        // C2 Major 7ths
+          allChords[ChordEnum.Am72] = new List<Note> { Note.a2, Note.c2, Note.e2   , Note.g2 };
+        allChords[ChordEnum.Bhalfdim72] = new List<Note> { Note.b2, Note.d2, Note.f2 , Note.a3 };
+           allChords[ChordEnum.C72] = new List<Note> { Note.c2, Note.e2, Note.g2    , Note.b3 };
+          allChords[ChordEnum.Dm72] = new List<Note> { Note.d2, Note.f2, Note.a3   , Note.c3 };
+          allChords[ChordEnum.Em72] = new List<Note> { Note.e2, Note.g2, Note.b3   , Note.d3 };
+           allChords[ChordEnum.F72] = new List<Note> { Note.f2, Note.a3, Note.c3    , Note.e3 };
+           allChords[ChordEnum.G72] = new List<Note> { Note.g2, Note.b3, Note.d3    , Note.f3 };
+
+        // C3 Major 7ths
+        allChords[ChordEnum.Am73] = new List<Note> { Note.a3, Note.c3, Note.e3, Note.g3 };
+      
+
+
+        // C Minor
+
+        // C1 Minor
+          allChords[ChordEnum.Cm1] = new List<Note> {  Note.c1, Note.eb1,  Note.g1 };
+        allChords[ChordEnum.Ddim1] = new List<Note> {  Note.d1,  Note.f1, Note.ab2 };
+          allChords[ChordEnum.Eb1] = new List<Note> { Note.eb1,  Note.g1, Note.bb2 };
+          allChords[ChordEnum.Fm1] = new List<Note> {  Note.f1, Note.ab2 , Note.c2 };
+          allChords[ChordEnum.Gm1] = new List<Note> {  Note.g1, Note.bb2,  Note.d2 };
+
+        // C2 Minor
+          allChords[ChordEnum.Ab2] = new List<Note> { Note.ab2, Note.c2, Note.eb2 };
+          allChords[ChordEnum.Bb2] = new List<Note> { Note.bb2, Note.d2, Note.f2 };
+          allChords[ChordEnum.Cm2] = new List<Note> {  Note.c2, Note.eb2,  Note.g2 };
+        allChords[ChordEnum.Ddim2] = new List<Note> {  Note.d2,  Note.f2, Note.ab3 };
+          allChords[ChordEnum.Eb2] = new List<Note> { Note.eb2,  Note.g2, Note.bb3 };
+          allChords[ChordEnum.Fm2] = new List<Note> {  Note.f2, Note.ab3 , Note.c3 };
+          allChords[ChordEnum.Gm2] = new List<Note> {  Note.g2, Note.bb3,  Note.d3 };
+
+        // C3 Minor
+        allChords[ChordEnum.Ab3] = new List<Note> { Note.ab3, Note.c3, Note.eb3};
+        allChords[ChordEnum.Bb3] = new List<Note> { Note.bb3, Note.d3, Note.f3 };
+        allChords[ChordEnum.Cm3] = new List<Note> { Note.c3, Note.eb3, Note.g3 };
+
+
+
 
         // C Major functional chords
+
         functionalChords[MusicalKey.CMajor] = new Dictionary<ChordFunction, List<ChordEnum>>();
         functionalChords[MusicalKey.CMajor][ChordFunction.root] = new List<ChordEnum> {  ChordEnum.C1, ChordEnum.C2, ChordEnum.C3,};
 
@@ -126,6 +171,29 @@ public class Chords : MonoBehaviour
         };
 
 
+
+        // C Minor functional chords
+
+        functionalChords[MusicalKey.CMinor] = new Dictionary<ChordFunction, List<ChordEnum>>();
+        functionalChords[MusicalKey.CMinor][ChordFunction.root] = new List<ChordEnum> { ChordEnum.Cm1, ChordEnum.Cm2, ChordEnum.Cm3, };
+
+        functionalChords[MusicalKey.CMinor][ChordFunction.tonic] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMinor.i1,       (ChordEnum)FunctionalCMinor.i2,     (ChordEnum)FunctionalCMinor.i3,
+            (ChordEnum)FunctionalCMinor.III1,     (ChordEnum)FunctionalCMinor.III2,
+        }; 
+        
+        functionalChords[MusicalKey.CMinor][ChordFunction.subdominant] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMinor.iv1,       (ChordEnum)FunctionalCMinor.iv2,
+            (ChordEnum)FunctionalCMinor.VI1,     (ChordEnum)FunctionalCMinor.VI2,
+            (ChordEnum)FunctionalCMinor.iidim1,     (ChordEnum)FunctionalCMinor.iidim2,
+        }; 
+        
+        functionalChords[MusicalKey.CMinor][ChordFunction.dominant] = new List<ChordEnum> {
+            (ChordEnum)FunctionalCMinor.v1,       (ChordEnum)FunctionalCMinor.v2,
+            (ChordEnum)FunctionalCMinor.VII1,     (ChordEnum)FunctionalCMinor.VII2,
+            
+        };
+
     }
 
 
@@ -138,6 +206,8 @@ public enum MusicalKey
     none = 0,
 
     CMajor,
+    CMinor,
+    count
 }
 
 public enum ChordFunction
@@ -164,7 +234,7 @@ public enum FunctionalCMajor
     vi1 = ChordEnum.Am2,
     viiidim1 = ChordEnum.Bdim2,
 
-    //C1
+    //C2
     I2 = ChordEnum.C2,
     ii2 = ChordEnum.Dm2,
     iii2 = ChordEnum.Em2,
@@ -175,19 +245,57 @@ public enum FunctionalCMajor
 
     //C3
     I3 = ChordEnum.C3,
-    //ii3 = ChordEnum.Dm3,
-    //iii3 = ChordEnum.Em3,
-    //IV3 = ChordEnum.F3,
-    //V3 = ChordEnum.G3,
-    //vi3 = ChordEnum.Am4,
-    //viiidim3 = ChordEnum.Bdim4,
+    
+    //C1 7ths
+          I71 =    ChordEnum.C1,
+         ii71 =   ChordEnum.Dm1,
+        iii71 =   ChordEnum.Em1,
+         IV71 =    ChordEnum.F1,
+          V71 =    ChordEnum.G1,
+         vi71 =   ChordEnum.Am2,
+    viiidim71 = ChordEnum.Bdim2,
+    
+    //C2 7ths
+          I72 =    ChordEnum.C2,
+         ii72 =   ChordEnum.Dm2,
+        iii72 =   ChordEnum.Em2,
+         IV72 =    ChordEnum.F2,
+          V72 =    ChordEnum.G2,
+         vi72 =   ChordEnum.Am3,
+    viiidim72 = ChordEnum.Bdim3,
 
-    ////C4
-    //I4 = ChordEnum.C4,
-    //ii4 = ChordEnum.Dm4,
-    //iii4 = ChordEnum.Em4,
-    //IV4 = ChordEnum.F4,
-    //V4 = ChordEnum.G4,
+    //C2 7ths
+    I73 = ChordEnum.C3,
+
+
+
+}
+
+public enum FunctionalCMinor
+{
+    none = 0,
+
+        //Cm1
+        i1 =   ChordEnum.Cm1,
+    iidim1 = ChordEnum.Ddim1,
+      III1 =   ChordEnum.Eb1,
+       iv1 =   ChordEnum.Fm1,
+        v1 =   ChordEnum.Gm1,
+       VI1 =   ChordEnum.Ab2,
+      VII1 =   ChordEnum.Bb2,
+      
+      //Cm2
+        i2 =   ChordEnum.Cm2,
+    iidim2 = ChordEnum.Ddim2,
+      III2 =   ChordEnum.Eb2,
+       iv2 =   ChordEnum.Fm2,
+        v2 =   ChordEnum.Gm2,
+       VI2 =   ChordEnum.Ab3,
+      VII2 =   ChordEnum.Bb3, 
+      
+      //Cm3
+        i3 =   ChordEnum.Cm3,
+       
 
 }
 
@@ -196,42 +304,71 @@ public enum ChordEnum
     none = 0,
 
     // C1 Major key
-    C1,
+     C1,
     Dm1,
     Em1,
-    F1,
-    G1,
+     F1,
+     G1,
 
     // C2 Major key
-    Am2,
+      Am2,
     Bdim2,
-    C2,
-    Dm2,
-    Em2,
-    F2,
-    G2,
+       C2,
+      Dm2,
+      Em2,
+      F2,
+      G2,
 
     // C3 Major key
     Am3,
     Bdim3,
     C3,
-    //Dm3,
-    //Em3,
-    //F3,
-    //G3,
 
-    //// C4 Major key
-    //Am4,
-    //Bdim4,
-    //C4,
-    //Dm4,
-    //Em4,
-    //F4,
-    //G4,
+
+    // C1 7ths Major key
+       C71,
+      Dm71,
+      Em71,
+       F71,
+       G71,
+
+    // C2 7ths Major key
+      Am72,
+    Bhalfdim72,
+       C72,
+      Dm72,
+      Em72,
+       F72,
+       G72,
+       
+       // C3 7ths Major key
+      Am73,
+  
+
+    // C1 Minor key
+      Cm1,
+    Ddim1,
+      Eb1,
+      Fm1,
+      Gm1,
+
+
+     // C2 Minor key
+      Ab2,
+     Bb2,
+      Cm2,
+    Ddim2,
+      Eb2,
+      Fm2,
+      Gm2,
+      
+      // C2 Minor key
+      Ab3,
+     Bb3,
+      Cm3,
+  
 
 }
-
-
 
 public enum Note
 {
@@ -285,24 +422,4 @@ public enum Note
     gb3 = 54 + 24,
     g3 = 55 + 24,
 
-    //gs3 = 56 + 24,
-    //ab4 = 56 + 24,
-    //a4 = 57 + 24,
-    //as4 = 58 + 24,
-    //bb4 = 58 + 24,
-    //b4 = 59 + 24,
-
-    //c4 = 48 + 36, // 84
-    //cs4 = 49 + 36,
-    //db4 = 49 + 36,
-    //d4 = 50 + 36,
-    //ds4 = 51 + 36,
-    //eb4 = 51 + 36,
-    //e4 = 52 + 36,
-    //f4 = 53 + 36,
-    //fs4 = 54 + 36,
-    //gb4 = 54 + 36,
-    //g4 = 55 + 36,
 }
-
-

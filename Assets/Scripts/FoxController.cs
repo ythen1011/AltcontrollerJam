@@ -9,7 +9,7 @@ public class FoxController : MonoBehaviour
     public GameObject targetChicken;
     public foxState state;
 
-    [Range(1, 20)] [SerializeField] float speed;
+    [Range(1, 20)] [SerializeField] public float speed;
 
     [SerializeField] Vector3 targetDirection;
     Rigidbody rb;
@@ -86,6 +86,11 @@ public class FoxController : MonoBehaviour
 
     private void ChaseChicken()
     {
+        if(targetChicken == null)
+        {
+            state = foxState.toDelete;
+            return;
+        }
         targetDirection = (targetChicken.transform.position - transform.position);
         targetDirection.y = 0;
         targetDirection.Normalize();

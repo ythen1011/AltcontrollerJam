@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+//using UnityEngine.TextCore;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour
             _instance = this;
         }
     }
+
+
+    public int round= 0;
+    public int deaths = 0;
 
     public int score = 0;
     public GameState gameState;
@@ -70,12 +74,13 @@ public class GameManager : MonoBehaviour
         camPosition = Camera.main.transform.position;
         camRotation = Camera.main.transform.rotation;
         screenShake = Camera.main.GetComponent<ScreenShake>();
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        round = chordSender.chordNumber;
         switch (gameState)
         {
             case GameState.begin:
@@ -101,6 +106,10 @@ public class GameManager : MonoBehaviour
 
         Camera.main.transform.position = camPosition + screenShake.GetShakePosition();
         Camera.main.transform.rotation = camRotation * screenShake.GetShakeRotation();
+
+        float deathsPerRound= deaths / round + 1; 
+
+       // foxManager.SetFoxSpeed
 
     }
 
@@ -133,6 +142,7 @@ public class GameManager : MonoBehaviour
                 feathers.Add(f);
                 f.GetComponent<ParticleSystem>().Play();
                 Camera.main.GetComponent<ScreenShake>().AddTrauma();
+                deaths++;
             }
         }
         foreach(GameObject del in toDestroy)

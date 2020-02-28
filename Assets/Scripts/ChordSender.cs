@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ChordSender : MonoBehaviour
 {
@@ -31,25 +32,34 @@ public class ChordSender : MonoBehaviour
     [SerializeField] GameObject[] spawnPoint = new GameObject[3];
     [SerializeField] Vector3 keyPositionOffset;
 
+    [SerializeField]  TextMeshProUGUI chordText;
+    [SerializeField]  TextMeshProUGUI keyText;
+    [SerializeField]  TextMeshProUGUI functionText;
 
     [SerializeField] Keyboard piano;
+
+    public int chordNumber = 0;
+
+    public int difficulty = 3; // 3 is normal, 4 is hard
 
 
     // Start is called before the first frame update
     void Start()
     {
-       
+
 
         currentProgression = (Progression)Random.Range(1, (int)Progression.count); // get random progression
-        
-       
+
+
 
     }
 
 
     public void AssignPositions(Chord chord)
     {
-        Debug.Log(chord.chord);
+        chordText.text = chord.chord.ToString().Substring(0, chord.chord.ToString().Length-1);
+        keyText.text = "Key: " + chord.keyThisChordIsIn.ToString();
+        Debug.Log(chord.chord.ToString());
         while (chickens.Count < chord.notes.Count)
         {
             GameObject chicken = Instantiate(chickenObject, spawnPoint[chickens.Count % spawnPoint.Length].transform.position+ new Vector3(0,keyPositionOffset.y,0), Quaternion.identity);
@@ -98,6 +108,12 @@ public class ChordSender : MonoBehaviour
 
     private void GenerateNextProgression()
     {
+        if(chordNumber/(int)12 %2 != 0)
+        {
+            key = (MusicalKey)Random.Range(1, (int)MusicalKey.count); // maybe switch key
+        }
+
+        currentProgression = (Progression)Random.Range(1, (int)Progression.count); // get random progression
         switch (currentProgression)
         {
             case Progression.None:
@@ -107,17 +123,20 @@ public class ChordSender : MonoBehaviour
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.dominant));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordNumber += 3;
                 break;
             case Progression.TonicSubdominantTonic:
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.subdominant));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordNumber += 3;
                 break;
             case Progression.TonicDominantSubdominantTonic:
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.dominant));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.subdominant));
                 chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordNumber += 4;
                 break;
             case Progression.count:
                 Debug.LogError("Error in progression assignment");

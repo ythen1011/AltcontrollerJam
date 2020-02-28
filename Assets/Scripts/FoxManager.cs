@@ -50,7 +50,13 @@ public class FoxManager : MonoBehaviour
         foxList.RemoveAll(fox => fox == null);
     }
 
-
+    public void SetFoxSpeed(float speed)
+    {
+        foreach(GameObject fox in foxList)
+        {
+            fox.GetComponent<FoxController>().speed = speed;
+        }
+    }
 
     public void GenerateFoxes(List<ChickenController> chickens)
     {
