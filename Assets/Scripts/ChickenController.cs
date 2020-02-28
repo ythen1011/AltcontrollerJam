@@ -20,10 +20,12 @@ public class ChickenController : MonoBehaviour
     private bool jumping = false;
     [Range(1, 10)]
     [SerializeField] float jumpVelocity;
-    [SerializeField] float fallMultiplier = 2.5f;
+    [Range(0,5)] [SerializeField] float fallMultiplier;
     [SerializeField] float lowJumpMultiplier = 2f;
 
     bool overFox = false;
+
+    AudioSource dyingAudio;
 
     public chickenState state;
 
@@ -123,7 +125,7 @@ public class ChickenController : MonoBehaviour
         //    }
         //}
 
-
+        //targetDirection = targetDirection.y >= 0 ? targetDirection : new Vector3(targetDirection.x, 0, targetDirection.z);
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0); // fix rotation to only y
     }
 
@@ -172,6 +174,7 @@ public class ChickenController : MonoBehaviour
     {
         if(other.tag == "Fox")
         {
+
             state = chickenState.toDelete;
         }
     }

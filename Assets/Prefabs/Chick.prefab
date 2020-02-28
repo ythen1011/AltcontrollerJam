@@ -148,5 +148,6 @@ MonoBehaviour:
   target: {x: 0, y: 0, z: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   jumpVelocity: 10
-  fallMultiplier: 2.5
+  fallMultiplier: 5
   lowJumpMultiplier: 2
+  state: 0

@@ -58,7 +58,11 @@ public class FoxManager : MonoBehaviour
         {
             Debug.Assert(foxSpawnPoint.Count > 0);
             int index = Random.Range(0, foxSpawnPoint.Count);
-            GameObject foxObject = Instantiate(this.foxObject, foxSpawnPoint[index].transform.position, Quaternion.identity);
+
+            Vector3 spawnPosition = foxSpawnPoint[index].transform.position;
+            //spawnPosition += 
+
+            GameObject foxObject = Instantiate(this.foxObject, spawnPosition, Quaternion.identity);
             foxList.Add(foxObject);
             FoxController fox = foxObject.GetComponent<FoxController>();
             fox.targetChicken = chick.gameObject;

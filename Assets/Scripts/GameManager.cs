@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour
     ChordSender chordSender;
     FoxManager foxManager;
 
+    AudioSource chickenDying;
+
+    [SerializeField] GameObject feather;
+
+    [SerializeField] List<GameObject> feathers;
 
 
 
@@ -57,7 +62,9 @@ public class GameManager : MonoBehaviour
     {
         chordSender = GetComponentInChildren<ChordSender>();
         foxManager = GetComponent<FoxManager>();
-   
+        chickenDying = GetComponent<AudioSource>();
+
+
     }
 
     // Update is called once per frame
@@ -84,6 +91,20 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+        CleanUpFeathers();
+    }
+
+    private void CleanUpFeathers()
+    {
+        feathers.RemoveAll(f => f == null);
+        foreach (GameObject f in feathers)
+        {
+            if (!f.GetComponent<ParticleSystem>().isPlaying)
+            {
+                Destroy(f);
+            }
+        }
+        feathers.RemoveAll(f => f == null);
     }
 
     private void CheckIfChickensAreDead()
@@ -96,6 +117,11 @@ public class GameManager : MonoBehaviour
             if (chick.state == ChickenController.chickenState.toDelete)
             {
                 toDestroy.Add(chick.gameObject);
+                chickenDying.Play();
+                chickenDying.time = 1.08f;
+                GameObject f = Instantiate(feather, chick.gameObject.transform.position, Quaternion.identity);
+                feathers.Add(f);
+                f.GetComponent<ParticleSystem>().Play();
             }
         }
         foreach(GameObject del in toDestroy)
