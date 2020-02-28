@@ -46,7 +46,7 @@ public class ChickenController : MonoBehaviour
         {
             targetDirection.Normalize();
             transform.LookAt(target);
-            state = chickenState.runningToChord;
+            
 
         }
         else if(targetDirection.magnitude < skidDistance && targetDirection.magnitude > onTargetTolerance+0.1)

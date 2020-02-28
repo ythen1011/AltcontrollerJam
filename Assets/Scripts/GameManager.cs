@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,14 +32,17 @@ public class GameManager : MonoBehaviour
 
     ChordSender chordSender;
     FoxManager foxManager;
+  
 
     AudioSource chickenDying;
 
     [SerializeField] GameObject feather;
 
     [SerializeField] List<GameObject> feathers;
+    ScreenShake screenShake;
 
-
+    Vector3 camPosition;
+    Quaternion camRotation;
 
     public void GameOver()
     {
@@ -63,7 +67,9 @@ public class GameManager : MonoBehaviour
         chordSender = GetComponentInChildren<ChordSender>();
         foxManager = GetComponent<FoxManager>();
         chickenDying = GetComponent<AudioSource>();
-
+        camPosition = Camera.main.transform.position;
+        camRotation = Camera.main.transform.rotation;
+        screenShake = Camera.main.GetComponent<ScreenShake>();
 
     }
 
@@ -92,6 +98,10 @@ public class GameManager : MonoBehaviour
                 break;
         }
         CleanUpFeathers();
+
+        Camera.main.transform.position = camPosition + screenShake.GetShakePosition();
+        Camera.main.transform.rotation = camRotation * screenShake.GetShakeRotation();
+
     }
 
     private void CleanUpFeathers()
@@ -122,6 +132,7 @@ public class GameManager : MonoBehaviour
                 GameObject f = Instantiate(feather, chick.gameObject.transform.position, Quaternion.identity);
                 feathers.Add(f);
                 f.GetComponent<ParticleSystem>().Play();
+                Camera.main.GetComponent<ScreenShake>().AddTrauma();
             }
         }
         foreach(GameObject del in toDestroy)
