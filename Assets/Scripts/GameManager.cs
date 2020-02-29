@@ -45,6 +45,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> feathers;
     ScreenShake screenShake;
 
+    [SerializeField] float defaultFoxSpeed = 10f;
+    [SerializeField] float foxSpeedAdjustmentAmount = 8f;
+    float CMajorDifficultyAdjustment = 2f;
+
     Vector3 camPosition;
     Quaternion camRotation;
 
@@ -107,10 +111,28 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.position = camPosition + screenShake.GetShakePosition();
         Camera.main.transform.rotation = camRotation * screenShake.GetShakeRotation();
 
-        float deathsPerRound= deaths / round + 1; 
 
-       // foxManager.SetFoxSpeed
+        // adjust the fox speed based on player's performance
+        AdjustFoxSpeed();
 
+    }
+
+    private void AdjustFoxSpeed()
+    {
+        float foxSpeed = defaultFoxSpeed;
+
+        float deathsPerRound = (deaths + 10) / (round + 10 + 1); // round zero indexd
+
+        float dificultyAdjustment = (1 - deathsPerRound);
+
+        dificultyAdjustment = Mathf.Clamp(dificultyAdjustment, -1, 1);
+
+        float cmajorAdjustment = chordSender.currentKey == MusicalKey.CMajor ? CMajorDifficultyAdjustment : 0f;
+
+        foxSpeed = defaultFoxSpeed + cmajorAdjustment + dificultyAdjustment * foxSpeedAdjustmentAmount;
+
+
+        foxManager.SetFoxSpeed(foxSpeed);
     }
 
     private void CleanUpFeathers()

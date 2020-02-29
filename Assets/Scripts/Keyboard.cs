@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using MidiJack;
+using System;
 
 public class Keyboard : MonoBehaviour
 {
     public const int numberOfKeys = 32;
 
     public Dictionary<KeyIndex, Note> KeymappingKeyToNote = new Dictionary<KeyIndex, Note>();
+    public Dictionary<KeyIndex, Note> KeymappingComputerKeyboardToNote = new Dictionary<KeyIndex, Note>();
     public Dictionary<Note,KeyIndex> KeymappingNoteToKey = new Dictionary<Note,KeyIndex>();
     public Dictionary<KeyIndex, GameObject> keys = new Dictionary<KeyIndex, GameObject>();
     List<KeyIndex> indices = new List<KeyIndex>();
@@ -24,7 +26,7 @@ public class Keyboard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // get the keys
         for(int i = 0; i < numberOfKeys; i++)
         {
             GameObject key = GameObject.Find("Key" + i);
@@ -33,7 +35,9 @@ public class Keyboard : MonoBehaviour
             keyObjects[i].GetComponent<KeyControl>().note = (KeyIndex) i;
         }
 
-        System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex));
+        // match up 0 indexes keys with the midi note value (there is actually no reason to do this it's an artifact from before i knew how sound would be implemented
+
+        System.Array indicesArray = KeyIndex.GetValues(typeof(KeyIndex)); // ugly way of getting an itteratable from an enum
         foreach(KeyIndex i in indicesArray)
         {
             indices.Add(i);
@@ -46,7 +50,7 @@ public class Keyboard : MonoBehaviour
             notes.Add(n);
         }
 
-        int length = indicesArray.Length < notesArray.Length ? indicesArray.Length : notesArray.Length;
+        int length = indicesArray.Length < notesArray.Length ? indicesArray.Length : notesArray.Length; // use the smaller one just to be safe
         for(int i = 0; i < length; i++)
         {
             KeymappingKeyToNote[indices[i]] = notes[i];
@@ -58,10 +62,12 @@ public class Keyboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void StopSoftly(AudioSource audio)
+    
+
+    public void StopSoftly(AudioSource audio) // unused
     {
         StartCoroutine("FadeVolume", audio);
     }
@@ -127,33 +133,59 @@ public enum KeyIndex
     fs3 = 6  + 24,
     gb3 = 6  + 24,
      g3 = 7  + 24,
-    //gs3 = 8  + 24,
-    //ab4 = 8  + 24,
-    // a4 = 9  + 24,
-    //as4 = 10 + 24,
-    //bb4 = 10 + 24,
-    // b4 = 11 + 24,
+         
+}
+public enum ComputerKeyboardKeyIndex
+{
+   
+     c1 = KeyCode.Tab ,
+    cs1 = KeyCode.Alpha1,
+    db1 = KeyCode.Alpha1,
+     d1 = KeyCode.Q ,
+    ds1 = KeyCode.Alpha2,
+    eb1 = KeyCode.Alpha2,
+     e1 = KeyCode.W,
+     f1 = KeyCode.Alpha3,
+    fs1 = KeyCode.Alpha3,
+    gb1 = KeyCode.E,
+     g1 = KeyCode.R,
+    gs1 = KeyCode.Alpha5,
+    ab2 = KeyCode.Alpha5,
+     a2 = KeyCode.T,
+    as2 = KeyCode.Alpha6,
+    bb2 = KeyCode.Alpha6,
+     b2 = KeyCode.Y,
+   
+     c2 = KeyCode.U ,
+    cs2 = KeyCode.Alpha8,
+    db2 = KeyCode.Alpha8,
+     d2 = KeyCode.W,
+    ds2 = KeyCode.Alpha3,
+    eb2 = KeyCode.Alpha3,
+     e2 = KeyCode.E,
+     f2 = KeyCode.R,
+    fs2 = KeyCode.Alpha5,
+    gb2 = KeyCode.Alpha5,
+     g2 = KeyCode.T,
+    gs2 = KeyCode.Alpha6,
+    ab3 = KeyCode.Alpha6,
+     a3 = KeyCode.Y,
+    as3 = KeyCode.Alpha7,
+    bb3 = KeyCode.Alpha7,
+     b3 = KeyCode.U,
 
-
-    // c4 = 0  + 36,
-    //cs4 = 1  + 36,
-    //db4 = 1  + 36,
-    // d4 = 2  + 36,
-    //ds4 = 3  + 36,
-    //eb4 = 3  + 36,
-    // e4 = 4  + 36,
-    // f4 = 5  + 36,
-    //fs4 = 6  + 36,
-    //gb4 = 6  + 36,
-    // g4 = 7  + 36,
-    //gs4 = 8  + 36,
-    //ab5 = 8  + 36,
-    // a5 = 9  + 36,
-    //as5 = 10 + 36,
-    //bb5 = 10 + 36,
-    // b5 = 11 + 36,
-
-     
+    c3 = 0  + 24,
+    cs3 = 1  + 24,
+    db3 = 1  + 24,
+     d3 = 2  + 24,
+    ds3 = 3  + 24,
+    eb3 = 3  + 24,
+     e3 = 4  + 24,
+     f3 = 5  + 24,
+    fs3 = 6  + 24,
+    gb3 = 6  + 24,
+     g3 = 7  + 24,
+         
 }
 
 

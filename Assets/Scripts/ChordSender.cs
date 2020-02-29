@@ -12,7 +12,7 @@ public class ChordSender : MonoBehaviour
    // [Range(0.1f,10f)] [SerializeField] float timeBetweenChords;
     [Range(0.1f,10f)] [SerializeField] public float timeBetweenProgressions;
 
-    [SerializeField] MusicalKey key;
+    [SerializeField] public MusicalKey currentKey;
 
     [SerializeField] Chords chordController ;
 
@@ -110,7 +110,7 @@ public class ChordSender : MonoBehaviour
     {
         if(chordNumber/(int)12 %2 != 0)
         {
-            key = (MusicalKey)Random.Range(1, (int)MusicalKey.count); // maybe switch key
+            currentKey = (MusicalKey)Random.Range(1, (int)MusicalKey.count); // maybe switch key
         }
 
         currentProgression = (Progression)Random.Range(1, (int)Progression.count); // get random progression
@@ -120,22 +120,22 @@ public class ChordSender : MonoBehaviour
                 Debug.LogError("Error in progression assignment");
                 break;
             case Progression.TonicDominantTonic:
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.dominant));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.dominant));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
                 chordNumber += 3;
                 break;
             case Progression.TonicSubdominantTonic:
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.subdominant));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.subdominant));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
                 chordNumber += 3;
                 break;
             case Progression.TonicDominantSubdominantTonic:
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.dominant));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.subdominant));
-                chordQueue.Enqueue(chordController.GetChordOfType(key, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.dominant));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.subdominant));
+                chordQueue.Enqueue(chordController.GetChordOfType(currentKey, ChordFunction.tonic));
                 chordNumber += 4;
                 break;
             case Progression.count:

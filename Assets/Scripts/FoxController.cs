@@ -9,7 +9,7 @@ public class FoxController : MonoBehaviour
     public GameObject targetChicken;
     public foxState state;
 
-    [Range(1, 20)] [SerializeField] public float speed;
+    [Range(1, 20)] [HideInInspector] public float speed;
 
     [SerializeField] Vector3 targetDirection;
     Rigidbody rb;
