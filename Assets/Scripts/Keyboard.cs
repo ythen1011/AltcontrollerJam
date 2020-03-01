@@ -10,10 +10,12 @@ public class Keyboard : MonoBehaviour
     public const int numberOfKeys = 32;
 
     public Dictionary<KeyIndex, Note> KeymappingKeyToNote = new Dictionary<KeyIndex, Note>();
-    public Dictionary<KeyIndex, Note> KeymappingComputerKeyboardToNote = new Dictionary<KeyIndex, Note>();
     public Dictionary<Note,KeyIndex> KeymappingNoteToKey = new Dictionary<Note,KeyIndex>();
+    public Dictionary<ComputerKeyboardKeyIndex, Note> KeymappingComputerKeyboardToNote = new Dictionary<ComputerKeyboardKeyIndex, Note>();
+    public Dictionary< Note, ComputerKeyboardKeyIndex> KeymappingNoteToComputerKeyboard = new Dictionary< Note, ComputerKeyboardKeyIndex>();
     public Dictionary<KeyIndex, GameObject> keys = new Dictionary<KeyIndex, GameObject>();
     List<KeyIndex> indices = new List<KeyIndex>();
+    List<ComputerKeyboardKeyIndex> computerKeyboardIndices = new List<ComputerKeyboardKeyIndex>();
     List<Note> notes = new List<Note>();
     [SerializeField] List<GameObject> keyObjects = new List<GameObject>();
     List<Material> upMat = new List<Material>();
@@ -32,7 +34,9 @@ public class Keyboard : MonoBehaviour
             GameObject key = GameObject.Find("Key" + i);
             Debug.Assert(key != null);
             keyObjects.Add(key);
-            keyObjects[i].GetComponent<KeyControl>().note = (KeyIndex) i;
+           
+            keyObjects[i].GetComponent<KeyControl>().keyOnKeyboard = (KeyIndex) i;
+            keyObjects[i].GetComponent<KeyControl>().keyOnComputerKeyboard = (ComputerKeyboardKeyIndex) i;
         }
 
         // match up 0 indexes keys with the midi note value (there is actually no reason to do this it's an artifact from before i knew how sound would be implemented
@@ -42,6 +46,12 @@ public class Keyboard : MonoBehaviour
         {
             indices.Add(i);
             keys[i] = keyObjects[(int)i];
+        }
+
+        System.Array keboardIndicesArray = ComputerKeyboardKeyIndex.GetValues(typeof(ComputerKeyboardKeyIndex)); // ugly way of getting an itteratable from an enum
+        foreach(ComputerKeyboardKeyIndex i in keboardIndicesArray)
+        {
+            computerKeyboardIndices.Add(i);
         }
 
         System.Array notesArray = Note.GetValues(typeof(Note));
@@ -55,6 +65,14 @@ public class Keyboard : MonoBehaviour
         {
             KeymappingKeyToNote[indices[i]] = notes[i];
             KeymappingNoteToKey[notes[i]] = indices[i];
+            
+            KeymappingComputerKeyboardToNote[computerKeyboardIndices[i]] = notes[i];
+            KeymappingNoteToComputerKeyboard[notes[i]] = computerKeyboardIndices[i];
+        }
+
+        foreach(GameObject key in keys.Values)
+        {
+            key.GetComponent<KeyControl>().note = KeymappingKeyToNote[key.GetComponent<KeyControl>().keyOnKeyboard];
         }
         
     }
@@ -159,33 +177,34 @@ public enum ComputerKeyboardKeyIndex
      c2 = KeyCode.U ,
     cs2 = KeyCode.Alpha8,
     db2 = KeyCode.Alpha8,
-     d2 = KeyCode.W,
-    ds2 = KeyCode.Alpha3,
-    eb2 = KeyCode.Alpha3,
-     e2 = KeyCode.E,
-     f2 = KeyCode.R,
-    fs2 = KeyCode.Alpha5,
-    gb2 = KeyCode.Alpha5,
-     g2 = KeyCode.T,
-    gs2 = KeyCode.Alpha6,
-    ab3 = KeyCode.Alpha6,
-     a3 = KeyCode.Y,
-    as3 = KeyCode.Alpha7,
-    bb3 = KeyCode.Alpha7,
-     b3 = KeyCode.U,
+     d2 = KeyCode.I,
+    ds2 = KeyCode.Alpha9,
+    eb2 = KeyCode.Alpha9,
+     e2 = KeyCode.O,
+     f2 = KeyCode.P,
+    fs2 = KeyCode.Minus,
+    gb2 = KeyCode.Minus,
+     g2 = KeyCode.LeftBracket,
+    gs2 = KeyCode.Equals,
+    ab3 = KeyCode.Equals,
+     a3 = KeyCode.RightBracket,
+    as3 = KeyCode.Backspace,
+    bb3 = KeyCode.Backspace,
+     b3 = KeyCode.Hash,
 
-    c3 = 0  + 24,
-    cs3 = 1  + 24,
-    db3 = 1  + 24,
-     d3 = 2  + 24,
-    ds3 = 3  + 24,
-    eb3 = 3  + 24,
-     e3 = 4  + 24,
-     f3 = 5  + 24,
-    fs3 = 6  + 24,
-    gb3 = 6  + 24,
-     g3 = 7  + 24,
-         
+    c3  = KeyCode.Z ,
+    cs3 = KeyCode.S,
+    db3 = KeyCode.S,
+     d3 = KeyCode.X,
+    ds3 = KeyCode.D,
+    eb3 = KeyCode.D,
+     e3 = KeyCode.C,
+     f3 = KeyCode.V,
+    fs3 = KeyCode.G,
+    gb3 = KeyCode.G,
+     g3 = KeyCode.B,
+
+
 }
 
 

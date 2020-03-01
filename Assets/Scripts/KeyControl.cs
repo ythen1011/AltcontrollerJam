@@ -9,53 +9,55 @@ public class KeyControl : MonoBehaviour
     public bool justPressed;
     Material defaultMat;
     Material redMat;
-    MeshRenderer renderer;
-    AudioSource audio;
-    public KeyIndex note;
+    MeshRenderer meshRenderer;
+    AudioSource audioSource;
+    public Note note;
+    public KeyIndex keyOnKeyboard;
+    public ComputerKeyboardKeyIndex keyOnComputerKeyboard;
     Keyboard keyboard;
 
     // Start is called before the first frame update
     void Start()
     {
-        audio = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         keyboard = GetComponentInParent<Keyboard>();
-        renderer = GetComponent<MeshRenderer>();
-        defaultMat = renderer.material;
+        meshRenderer = GetComponent<MeshRenderer>();
+        defaultMat = meshRenderer.material;
         redMat = keyboard.redMat;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]);
+        float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]);
 
-        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
+        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]))
         {
-            audio.volume = strenght;
-            audio.pitch = Mathf.Pow(2, ((int)note + Keyboard.transpose) / 12f); // pitch shift for the key
-            audio.time = 0;
+            audioSource.volume = strenght;
+            audioSource.pitch = Mathf.Pow(2, ((int)keyOnKeyboard + Keyboard.transpose) / 12f); // pitch shift for the key
+            audioSource.time = 0;
             justPressed = true;
-            audio.Play();
+            audioSource.Play();
         }
 
-        if (audio.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]) != 0)
+        if (audioSource.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]) != 0)
         {
-            if (audio.isPlaying)
+            if (audioSource.isPlaying)
             {
-                renderer.material = redMat;
+                meshRenderer.material = redMat;
 
             }
         }
         else
         {
-            renderer.material = defaultMat;
+            meshRenderer.material = defaultMat;
             justPressed = false;
 
 
         }
-        if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
+        if (audioSource.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]))
         {
-            audio.time = audio.clip.length * 0.8f;
+            audioSource.time = audioSource.clip.length * 0.8f;
         }
         HandleAlternativeComputerKeyboardInput();
     }
@@ -63,34 +65,34 @@ public class KeyControl : MonoBehaviour
 
     private void HandleAlternativeComputerKeyboardInput()
     {
-        float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]);
+        float strenght = Input.GetKey((KeyCode)keyboard.KeymappingNoteToComputerKeyboard[note])?1f:0f;
 
-        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
+        if (Input.GetKeyDown((KeyCode)keyboard.KeymappingNoteToComputerKeyboard[note]))
         {
-            audio.volume = strenght;
-            audio.pitch = Mathf.Pow(2, ((int)note + Keyboard.transpose) / 12f); // pitch shift for the key
-            audio.time = 0;
+            audioSource.volume = strenght;
+            audioSource.pitch = Mathf.Pow(2, ((int)keyOnKeyboard + Keyboard.transpose) / 12f); // pitch shift for the key
+            audioSource.time = 0;
             justPressed = true;
-            audio.Play();
+            audioSource.Play();
         }
 
-        if (audio.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]) != 0)
+        if (audioSource.isPlaying && Input.GetKey((KeyCode)keyboard.KeymappingNoteToComputerKeyboard[note]))
         {
-            if (audio.isPlaying)
+            if (audioSource.isPlaying)
             {
-                renderer.material = redMat;
+                meshRenderer.material = redMat;
 
             }
         }
         else
         {
-            renderer.material = defaultMat;
+            meshRenderer.material = defaultMat;
             justPressed = false;
 
         }
-        if (audio.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[note]))
+        if (audioSource.isPlaying && Input.GetKeyUp((KeyCode)keyboard.KeymappingNoteToComputerKeyboard[note]))
         {
-            audio.time = audio.clip.length * 0.8f;
+            audioSource.time = audioSource.clip.length * 0.8f;
         }
     }
 

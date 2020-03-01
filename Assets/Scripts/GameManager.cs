@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
 
 
         // adjust the fox speed based on player's performance
-        AdjustFoxSpeed();
+       // AdjustFoxSpeed();
 
     }
 

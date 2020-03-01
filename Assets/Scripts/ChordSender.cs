@@ -49,7 +49,7 @@ public class ChordSender : MonoBehaviour
 
 
         currentProgression = (Progression)Random.Range(1, (int)Progression.count); // get random progression
-
+        currentKey = MusicalKey.CMajor;
 
 
     }
