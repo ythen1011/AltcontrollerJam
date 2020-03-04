@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class scoremenu : MonoBehaviour
 {
     // Start is called before the first frame update
-   public void PlayGame ()
+    public void PlayGame()
     {
         SceneManager.LoadScene("PullingItAllTogether");
     }
-    public void HighScore()
-    {
-        SceneManager.LoadScene("HighScore");
-    }
-
-    public void QuitGame ()
+    
+    public void QuitGame()
     {
         Debug.Log("hello");
         Application.Quit();
