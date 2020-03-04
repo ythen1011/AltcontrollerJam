@@ -45,8 +45,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] List<GameObject> feathers;
     ScreenShake screenShake;
-
-     float foxWaitTime;
+    float chickenWaitTime;
+    float maximumChickenWaitTime = 5;
+    float foxWaitTime;
     [Range(0, 10)] [SerializeField] float defaultFoxWaitTime;
 
     [Range(0.1f,20)][SerializeField] float defaultFoxSpeed;
@@ -147,9 +148,9 @@ public class GameManager : MonoBehaviour
 
         float cmajorAdjustment = chordSender.currentKey == MusicalKey.CMajor ? CMajorDifficultyAdjustment : 0f;
 
-        foxSpeed = defaultFoxSpeed + cmajorAdjustment;// + dificultyAdjustment * foxSpeedAdjustmentAmount;
+        time = defaultFoxWaitTime + cmajorAdjustment;// + dificultyAdjustment * foxSpeedAdjustmentAmount;
 
-        foxSpeed = Mathf.Clamp(foxSpeed, 1, 30);
+        foxWaitTime = Mathf.Clamp(foxWaitTime, 0, 5);
 
     }
 

@@ -402,12 +402,17 @@ PrefabInstance:
     - target: {fileID: 8430869238731540767, guid: bf2ac8718745937488e9d80e019b0806,
         type: 3}
       propertyPath: CMajorDifficultyAdjustment
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8430869238731540767, guid: bf2ac8718745937488e9d80e019b0806,
         type: 3}
       propertyPath: foxWaitTime
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8430869238731540767, guid: bf2ac8718745937488e9d80e019b0806,
+        type: 3}
+      propertyPath: defaultFoxWaitTime
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8430869238731540766, guid: bf2ac8718745937488e9d80e019b0806,
         type: 3}
