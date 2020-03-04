@@ -2,17 +2,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 
 public class HighScoreScene : MonoBehaviour
 {
-    List<ScoreStruct> scores = new List<ScoreStruct>();
+    List<ScoreClass> scores = new List<ScoreClass>();
+    [SerializeField] GameObject content;
+    [SerializeField] GameObject score;
+    float height;
 
     // Start is called before the first frame update
     void Start()
     {
-        // instance highscore display
         GetScores();
+        AddScores();
+        height = score.GetComponent<RectTransform>().rect.height;
+    }
+
+    private void AddScores()
+    {
+       scores.Sort();
+       for(int i = 0; i < scores.Count; i++)
+        {
+            GameObject s = Instantiate(score);
+            s.transform.parent = content.transform;
+            ScoreTextController text = s.GetComponent<ScoreTextController>();
+            text.number = (i + 1).ToString();
+            text.name = scores[i].name;
+            text.score = scores[i].roundsSurvived.ToString();
+            content.GetComponent<RectTransform>().sizeDelta = new Vector2(content.GetComponent<RectTransform>().sizeDelta.x,100 * (i + 1));
+        }
     }
 
     private void GetScores()
@@ -57,7 +78,7 @@ public class HighScoreScene : MonoBehaviour
                     break;
                 }
 
-                scores.Add(new ScoreStruct(name, deaths,roundsSurvived));
+                scores.Add(new ScoreClass(name, deaths,roundsSurvived));
                 loadNumber++;
             }
             catch (PlayerPrefsException)

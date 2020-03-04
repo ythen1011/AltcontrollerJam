@@ -82,10 +82,10 @@ public class ChordSender : MonoBehaviour
     {
 
 
-        if(chickens.Count == 0)
-        {
-            GameManager.Instance.GameOver();
-        }
+        //if(chickens.Count == 0)
+        //{
+        //   // GameManager.Instance.GameOver();
+        //}
         
 
         chordQueueVeiw = new List<Chord>(chordQueue);

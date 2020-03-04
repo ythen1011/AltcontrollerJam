@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/PullingItAllTogether.unity
     guid: 3b0f85950bb95234c90b2702168549e1
   - enabled: 1
-    path: Assets/Scenes/HighScore.unity
-    guid: 570031b83212b734f845bc44e6bfa6d4
+    path: Assets/Scenes/HighScores.unity
+    guid: 1ba7bfbe282d8b34e839570277a5baef
   m_configObjects: {}

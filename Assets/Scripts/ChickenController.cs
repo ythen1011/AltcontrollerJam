@@ -110,7 +110,7 @@ public class ChickenController : MonoBehaviour
                     if (overFox)
                     {
                         overFox = false;
-                        GameManager.Instance.JumpedOverFox();
+                       // GameManager.Instance.JumpedOverFox();
                     }
                 }
             }

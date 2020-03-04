@@ -2,25 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //using UnityEngine.TextCore;
 //public class ScoreComparitor : IComparer<Score>
 //{
 //    public int Compare(Score x, Score y)
 //    {
-        
+
 //        //key value pair is non nullable
 
 //        if(x.score > y.score)
 //        {
 //            return 1;
 //        }
-        
+
 //        else if(x.score == y.score)
 //        {
 //            return 0;
 //        } 
-        
+
 //        else if(x.score == y.score)
 //        {
 //            return -1;
@@ -33,33 +34,33 @@ using UnityEngine;
 //}
 
 [System.Serializable]
-public struct ScoreStruct : IComparable<ScoreStruct>
+public class ScoreClass : IComparable<ScoreClass>
 {
     public string name; 
     public int deaths;
     public int roundsSurvived;
 
-    public ScoreStruct(String _name, int _deaths, int _roundsSurvived)
+    public ScoreClass(String _name, int _deaths, int _roundsSurvived)
     {
         name = _name;
         deaths = _deaths;
         roundsSurvived = _roundsSurvived;
     }
-    public int CompareTo(ScoreStruct other)
+    public int CompareTo(ScoreClass other)
     {
-        if (this.deaths > other.deaths)
+        if (this.roundsSurvived > other.roundsSurvived)
         {
-            return 1;
+            return -1;
         }
 
-        else if (this.deaths == other.deaths)
+        else if (this.roundsSurvived == other.roundsSurvived)
         {
             return 0;
         }
 
-        else if (this.deaths == other.deaths)
+        else if (this.roundsSurvived == other.roundsSurvived)
         {
-            return -1;
+            return 1;
         }
         else
         {
@@ -87,6 +88,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [SerializeField] GameObject popupPrefab;
+    GameObject popup;
 
     [HideInInspector] public int round = 0;
     public int deaths = 0;
@@ -118,7 +121,9 @@ public class GameManager : MonoBehaviour
     List<GameObject> feathers = new List<GameObject>();
     ScreenShake screenShake;
     float chickenWaitTime;
-    float maximumChickenWaitTime = 10;
+    float foxRunTime;
+    float maximumChickenWaitTime = 15;
+    float maximumFoxRunTime = 10;
     float foxWaitTime;
     [Range(0, 10)] [SerializeField] float defaultFoxWaitTime;
 
@@ -126,7 +131,7 @@ public class GameManager : MonoBehaviour
     //[Range(0.1f, 20)] [SerializeField] float foxSpeedAdjustmentAmount;
     [Range(0f, 10)] [SerializeField] float CMajorDifficultyAdjustment;
 
-    [SerializeField] List<ScoreStruct> scores = new List<ScoreStruct>(); 
+    [SerializeField] List<ScoreClass> scores = new List<ScoreClass>(); 
 
     [SerializeField] string playerName;
 
@@ -154,15 +159,15 @@ public class GameManager : MonoBehaviour
     Vector3 camPosition;
     Quaternion camRotation;
 
-    public void GameOver()
-    {
+    //public void GameOver()
+    //{
 
-    }
+    //}
 
-    public void JumpedOverFox()
-    {
+    //public void JumpedOverFox()
+    //{
 
-    }
+    //}
 
 
 
@@ -230,7 +235,7 @@ public class GameManager : MonoBehaviour
                 }
 
 
-                scores.Add(new ScoreStruct(name, deaths,roundsSurvived ));
+                scores.Add(new ScoreClass(name, deaths,roundsSurvived ));
                 loadNumber++;
             }
             catch (PlayerPrefsException)
@@ -269,9 +274,13 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.gameEnding:
                 CheckIfChickensAreDead();
-                UpdateScores();
+                BringUpNameEnterPopup();
+                break;
+            case GameState.waitingForNameEnter:
+                
                 break;
             case GameState.ended:
+                SceneManager.LoadScene("HighScores");
                 break;
             default:
                 Debug.LogError("Uhandled Gamestate: " + gameState.ToString());
@@ -288,9 +297,18 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void UpdateScores()
+    private void BringUpNameEnterPopup()
     {
-        scores.Add(new ScoreStruct(playerName, deaths, chordSender.sequenceNumber-1));
+        popup = Instantiate(popupPrefab);
+        popup.transform.SetParent(GameObject.Find("MainCanvas").transform,false);
+        gameState = GameState.waitingForNameEnter;
+
+    }
+
+    public void UpdateScores()
+    {
+        playerName = popup.GetComponentInChildren<TMPro.TMP_InputField>().text;
+        scores.Add(new ScoreClass(playerName, deaths, chordSender.sequenceNumber-1));
         scores.Sort();
         SaveScores();
         gameState = GameState.ended;
@@ -371,7 +389,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckIfFoxesAreDead()
     {
-        if (foxManager.GotAnyFoxes())
+        if (foxManager.GotAnyFoxes(foxRunTime,maximumFoxRunTime))
         {
             return;
         }
@@ -384,14 +402,20 @@ public class GameManager : MonoBehaviour
     private void SendFoxes()
     {
         foxManager.GenerateFoxes(chordSender.chickens);
+        foxRunTime = Time.time;
         gameState = GameState.foxesChasing;
     }
 
     private void CheckIfChickensAreThereYet()
     {
-        bool chickensReady = false;
+        bool chickensReady = true;
         foreach(ChickenController chick in chordSender.chickens)
         {
+            if (Time.time > chickenWaitTime + maximumChickenWaitTime) {
+                chickensReady = true; // override
+                break;
+            }
+
             if(chick == null) // just to be safe
             {
                 continue;
@@ -399,20 +423,17 @@ public class GameManager : MonoBehaviour
 
             if (chick.state == ChickenController.chickenState.runningToChord) // still waiting on a chicken
             {
-                chickensReady =  false;
+                chickensReady = false;
+                break;
             }
-            if (Time.time < chickenWaitTime + maximumChickenWaitTime) {
-                chickensReady = true; // override
-            }
-            if (!chickensReady)
-            {
-                return;
-            }
+           
         }
-
-        // all chickens there
-        readyForFoxesTime = Time.time;
-        gameState = GameState.readyForFoxes;
+        if (chickensReady)
+        {
+            // all chickens there
+            readyForFoxesTime = Time.time;
+            gameState = GameState.readyForFoxes;
+        }
 
     }
 
@@ -457,8 +478,7 @@ public class GameManager : MonoBehaviour
         foxesChasing,
         gameEnding,
         ended,
-
-
+        waitingForNameEnter,
     }
 
 }

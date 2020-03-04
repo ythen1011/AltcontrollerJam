@@ -76,8 +76,15 @@ public class FoxManager : MonoBehaviour
         }
     }
 
-    public bool GotAnyFoxes()
+    public bool GotAnyFoxes(float foxRunTime,float maxFoxRunTime)
     {
+        if(Time.time > foxRunTime + maxFoxRunTime)
+        {
+            foreach (GameObject fox in foxList)
+            {
+                fox.GetComponent<FoxController>().state = FoxController.foxState.toDelete;
+            }
+        }
         return foxList.Count > 0;
     }
 

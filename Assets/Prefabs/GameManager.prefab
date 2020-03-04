@@ -46,11 +46,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d500f50f920bc4480f43a975502287, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
+  popupPrefab: {fileID: 6888675579303584866, guid: a72fc301c14e2df4b91e788c2241de58,
+    type: 3}
+  round: 0
+  deaths: 0
   gameState: 0
+  initialnumberOfLives: 30
   waiting: 0
+  lives: 0
   feather: {fileID: 2415957411773931524, guid: bf9576a575d4ffe46846dcbffc8b0030, type: 3}
-  feathers: []
+  defaultFoxWaitTime: 1
+  defaultFoxSpeed: 15
+  CMajorDifficultyAdjustment: 1
+  scores: []
+  playerName: 
 --- !u!114 &8430869238731540766
 MonoBehaviour:
   m_ObjectHideFlags: 0
