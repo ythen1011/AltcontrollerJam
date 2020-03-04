@@ -2,7 +2,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 //using UnityEngine.TextCore;
+//public class ScoreComparitor : IComparer<Score>
+//{
+//    public int Compare(Score x, Score y)
+//    {
+        
+//        //key value pair is non nullable
+
+//        if(x.score > y.score)
+//        {
+//            return 1;
+//        }
+        
+//        else if(x.score == y.score)
+//        {
+//            return 0;
+//        } 
+        
+//        else if(x.score == y.score)
+//        {
+//            return -1;
+//        }
+//        else
+//        {
+//            return 0;
+//        }
+//    }
+//}
+
+[System.Serializable]
+public struct ScoreStruct : IComparable<ScoreStruct>
+{
+    public string name; 
+    public int score;
+
+    public ScoreStruct(String _name, int _score)
+    {
+        name = _name;
+        score = _score;
+    }
+    public int CompareTo(ScoreStruct other)
+    {
+        if (this.score > other.score)
+        {
+            return 1;
+        }
+
+        else if (this.score == other.score)
+        {
+            return 0;
+        }
+
+        else if (this.score == other.score)
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -24,15 +86,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public int round= 0;
+   [HideInInspector] public int round= 0;
     public int deaths = 0;
+
+    //[SerializeField] List<ScoreStruct> scoreVeiw = new List<ScoreStruct>();
 
     //public int score = 0;
     public GameState gameState;
 
     float waitBeginTime;
 
+    //[SerializeField] ScoreComparitor scoreComparator;
+
+    [SerializeField] int numberOfRounds;
     [SerializeField] bool waiting = false;
+
+    
 
     ChordSender chordSender;
     FoxManager foxManager;
@@ -43,7 +112,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject feather;
 
-    [SerializeField] List<GameObject> feathers;
+    List<GameObject> feathers = new List<GameObject>();
     ScreenShake screenShake;
     float chickenWaitTime;
     float maximumChickenWaitTime = 10;
@@ -54,19 +123,29 @@ public class GameManager : MonoBehaviour
     //[Range(0.1f, 20)] [SerializeField] float foxSpeedAdjustmentAmount;
     [Range(0f, 10)] [SerializeField] float CMajorDifficultyAdjustment;
 
-    List<KeyValuePair<String, int>> scores = new List<KeyValuePair<string, int>>(); 
+    [SerializeField] List<ScoreStruct> scores = new List<ScoreStruct>(); 
+
+    [SerializeField] string playerName;
 
     private void OnApplicationQuit()
     {
-        for(int i = 0; i < scores.Count;  i++)
-        {
-            PlayerPrefs.SetString("scores_name_" + i, scores[i].Key);
-            PlayerPrefs.SetInt("scores_score_" + i, scores[i].Value);
-        }
-        PlayerPrefs.Save();
+        SaveScores();
         Destroy(this);
     }
 
+    private void SaveScores()
+    {
+        for (int i = 0; i < scores.Count; i++)
+        {
+            PlayerPrefs.SetString("scores_name_" + i, scores[i].name);
+            PlayerPrefs.SetInt("scores_score_" + i, scores[i].score);
+          //  ScoreVeiw s = new ScoreVeiw();
+            //s.name = scores[i].Key;
+            //s.score = scores[i].Value;
+            //scoreVeiw.Add(s);
+        }
+        PlayerPrefs.Save();
+    }
 
     Vector3 camPosition;
     Quaternion camRotation;
@@ -124,7 +203,7 @@ public class GameManager : MonoBehaviour
                 }
 
 
-                scores.Add(new KeyValuePair<string, int>(name, score));
+                scores.Add(new ScoreStruct(name, score));
                 loadNumber++;
             }
             catch (PlayerPrefsException)
@@ -162,7 +241,13 @@ public class GameManager : MonoBehaviour
                 CheckIfChickensAreDead();
                 CheckIfFoxesAreDead();
                 break;
+            case GameState.gameEnding:
+                UpdateScores();
+                break;
+            case GameState.ended:
+                break;
             default:
+                Debug.LogError("Uhandled Gamestate: " + gameState.ToString());
                 break;
         }
         CleanUpFeathers();
@@ -174,6 +259,14 @@ public class GameManager : MonoBehaviour
         // adjust the fox speed based on player's performance
         AdjustFoxWait();
 
+    }
+
+    private void UpdateScores()
+    {
+        scores.Add(new ScoreStruct(playerName, deaths));
+        scores.Sort();
+        SaveScores();
+        gameState = GameState.ended;
     }
 
     private void WaitForFoxes()
@@ -291,6 +384,11 @@ public class GameManager : MonoBehaviour
     // get the next chord, if it's the end of a sequence then wait a moment
     private void NewChord()
     {
+        if(chordSender.sequenceNumber > numberOfRounds)
+        {
+            gameState = GameState.gameEnding;
+            return;
+        }
         if (waiting)
         {
             if(waitBeginTime + chordSender.timeBetweenProgressions < Time.time)
@@ -322,6 +420,8 @@ public class GameManager : MonoBehaviour
         readyForFoxes,
         sendFoxes,
         foxesChasing,
+        gameEnding,
+        ended,
 
 
     }
