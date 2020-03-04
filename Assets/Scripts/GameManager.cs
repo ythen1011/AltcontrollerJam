@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> feathers;
     ScreenShake screenShake;
     float chickenWaitTime;
-    float maximumChickenWaitTime = 5;
+    float maximumChickenWaitTime = 7;
     float foxWaitTime;
     [Range(0, 10)] [SerializeField] float defaultFoxWaitTime;
 
@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (chick.state == ChickenController.chickenState.runningToChord) // still waiting on a chicken
+            if (chick.state == ChickenController.chickenState.runningToChord && Time.time < chickenWaitTime+maximumChickenWaitTime) // still waiting on a chicken
             {
                 return;
             }
@@ -252,6 +252,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            chickenWaitTime = Time.time;
             gameState = GameState.chickensRunningToLocation;
         }
     }
