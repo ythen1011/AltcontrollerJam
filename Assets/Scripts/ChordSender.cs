@@ -39,6 +39,7 @@ public class ChordSender : MonoBehaviour
     [SerializeField] Keyboard piano;
 
     public int chordNumber = 0;
+    public int sequenceNumber = 0;
 
     public int difficulty = 3; // 3 is normal, 4 is hard
 
@@ -108,9 +109,10 @@ public class ChordSender : MonoBehaviour
 
     private void GenerateNextProgression()
     {
-        if(chordNumber/(int)12 %2 != 0)
+        if(  sequenceNumber % 3 != 0)
         {
             currentKey = (MusicalKey)Random.Range(1, (int)MusicalKey.count); // maybe switch key
+           // currentKey = currentKey == MusicalKey.CMajor ? MusicalKey.CMinor : MusicalKey.CMajor; // maybe switch key
         }
 
         currentProgression = (Progression)Random.Range(1, (int)Progression.count); // get random progression
@@ -144,7 +146,10 @@ public class ChordSender : MonoBehaviour
             default:
                 Debug.LogError("Error in progression assignment");
                 break;
+
+
         }
+        sequenceNumber++;
     }
 
     //enum State

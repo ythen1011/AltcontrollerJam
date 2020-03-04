@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
 
     ChordSender chordSender;
     FoxManager foxManager;
-  
+
+    float readyForFoxesTime;
 
     AudioSource chickenDying;
 
@@ -45,9 +46,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> feathers;
     ScreenShake screenShake;
 
-    [SerializeField] float defaultFoxSpeed = 10f;
-    [SerializeField] float foxSpeedAdjustmentAmount = 8f;
-    float CMajorDifficultyAdjustment = 2f;
+     float foxWaitTime;
+    [Range(0, 10)] [SerializeField] float defaultFoxWaitTime;
+
+    [Range(0.1f,20)][SerializeField] float defaultFoxSpeed;
+    //[Range(0.1f, 20)] [SerializeField] float foxSpeedAdjustmentAmount;
+    [Range(0f, 10)] [SerializeField] float CMajorDifficultyAdjustment;
 
     Vector3 camPosition;
     Quaternion camRotation;
@@ -78,7 +82,10 @@ public class GameManager : MonoBehaviour
         camPosition = Camera.main.transform.position;
         camRotation = Camera.main.transform.rotation;
         screenShake = Camera.main.GetComponent<ScreenShake>();
-        
+        foxManager.SetFoxSpeed(defaultFoxSpeed);
+        foxWaitTime = defaultFoxWaitTime;
+
+
     }
 
     // Update is called once per frame
@@ -95,6 +102,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.chickensRunningToLocation:
                 CheckIfChickensAreThereYet();
+                break;
+            case GameState.readyForFoxes:
+                WaitForFoxes();
                 break;
             case GameState.sendFoxes:
                 SendFoxes();
@@ -113,26 +123,34 @@ public class GameManager : MonoBehaviour
 
 
         // adjust the fox speed based on player's performance
-       // AdjustFoxSpeed();
+        AdjustFoxWait();
 
     }
 
-    private void AdjustFoxSpeed()
+    private void WaitForFoxes()
     {
-        float foxSpeed = defaultFoxSpeed;
+        if(Time.time > readyForFoxesTime + foxWaitTime)
+        {
+            gameState = GameState.sendFoxes;
+        }
+    }
 
-        float deathsPerRound = (deaths + 10) / (round + 10 + 1); // round zero indexd
+    private void AdjustFoxWait()
+    {
+        float time = defaultFoxWaitTime;
 
-        float dificultyAdjustment = (1 - deathsPerRound);
+        //float deathsPerRound = (deaths + 10) / (round + 10 + 1); // round zero indexd
 
-        dificultyAdjustment = Mathf.Clamp(dificultyAdjustment, -1, 1);
+        //float dificultyAdjustment = (1 - deathsPerRound);
+
+        //dificultyAdjustment = Mathf.Clamp(dificultyAdjustment, -1, 1);
 
         float cmajorAdjustment = chordSender.currentKey == MusicalKey.CMajor ? CMajorDifficultyAdjustment : 0f;
 
-        foxSpeed = defaultFoxSpeed + cmajorAdjustment + dificultyAdjustment * foxSpeedAdjustmentAmount;
+        foxSpeed = defaultFoxSpeed + cmajorAdjustment;// + dificultyAdjustment * foxSpeedAdjustmentAmount;
 
+        foxSpeed = Mathf.Clamp(foxSpeed, 1, 30);
 
-        foxManager.SetFoxSpeed(foxSpeed);
     }
 
     private void CleanUpFeathers()
@@ -208,7 +226,8 @@ public class GameManager : MonoBehaviour
         }
 
         // all chickens there
-        gameState = GameState.sendFoxes;
+        readyForFoxesTime = Time.time;
+        gameState = GameState.readyForFoxes;
 
     }
 
@@ -242,6 +261,7 @@ public class GameManager : MonoBehaviour
        
         newChord,
         chickensRunningToLocation,
+        readyForFoxes,
         sendFoxes,
         foxesChasing,
 

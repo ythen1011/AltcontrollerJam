@@ -59,7 +59,7 @@ public class KeyControl : MonoBehaviour
         {
             audioSource.time = audioSource.clip.length * 0.8f;
         }
-        HandleAlternativeComputerKeyboardInput();
+       // HandleAlternativeComputerKeyboardInput();
     }
 
 
