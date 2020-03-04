@@ -36,26 +36,28 @@ using UnityEngine;
 public struct ScoreStruct : IComparable<ScoreStruct>
 {
     public string name; 
-    public int score;
+    public int deaths;
+    public int roundsSurvived;
 
-    public ScoreStruct(String _name, int _score)
+    public ScoreStruct(String _name, int _deaths, int _roundsSurvived)
     {
         name = _name;
-        score = _score;
+        deaths = _deaths;
+        roundsSurvived = _roundsSurvived;
     }
     public int CompareTo(ScoreStruct other)
     {
-        if (this.score > other.score)
+        if (this.deaths > other.deaths)
         {
             return 1;
         }
 
-        else if (this.score == other.score)
+        else if (this.deaths == other.deaths)
         {
             return 0;
         }
 
-        else if (this.score == other.score)
+        else if (this.deaths == other.deaths)
         {
             return -1;
         }
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-   [HideInInspector] public int round= 0;
+    [HideInInspector] public int round = 0;
     public int deaths = 0;
 
     //[SerializeField] List<ScoreStruct> scoreVeiw = new List<ScoreStruct>();
@@ -98,10 +100,11 @@ public class GameManager : MonoBehaviour
 
     //[SerializeField] ScoreComparitor scoreComparator;
 
-    [SerializeField] int numberOfRounds;
+    //[SerializeField] int numberOfRounds = 10;
+    [SerializeField] int initialnumberOfLives = 30;
     [SerializeField] bool waiting = false;
 
-    
+    public int lives;
 
     ChordSender chordSender;
     FoxManager foxManager;
@@ -138,7 +141,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < scores.Count; i++)
         {
             PlayerPrefs.SetString("scores_name_" + i, scores[i].name);
-            PlayerPrefs.SetInt("scores_score_" + i, scores[i].score);
+            PlayerPrefs.SetInt("scores_deaths_" + i, scores[i].deaths);
+            PlayerPrefs.SetInt("scores_round_" + i, scores[i].roundsSurvived);
           //  ScoreVeiw s = new ScoreVeiw();
             //s.name = scores[i].Key;
             //s.score = scores[i].Value;
@@ -162,7 +166,7 @@ public class GameManager : MonoBehaviour
 
 
 
-
+ 
 
 
 
@@ -178,6 +182,14 @@ public class GameManager : MonoBehaviour
         screenShake = Camera.main.GetComponent<ScreenShake>();
         foxManager.SetFoxSpeed(defaultFoxSpeed);
         foxWaitTime = defaultFoxWaitTime;
+        lives = initialnumberOfLives;
+        GetScores();
+
+    }
+
+    private void GetScores()
+    {
+        scores.Clear();
         bool StillToLoad = true;
         int loadNumber = 0;
         while (StillToLoad)
@@ -185,25 +197,40 @@ public class GameManager : MonoBehaviour
             try
             {
                 string name;
-                if(PlayerPrefs.HasKey("scores_name_"+ loadNumber)){
-                    name = PlayerPrefs.GetString("scores_name_" + loadNumber,"File Load Name Error");
+                if (PlayerPrefs.HasKey("scores_name_" + loadNumber))
+                {
+                    name = PlayerPrefs.GetString("scores_name_" + loadNumber, "File Load Name Error");
                 }
-                else { 
-                    StillToLoad = false;
-                    break;
-                } 
-
-                int score;
-                if(PlayerPrefs.HasKey("scores_score_"+ loadNumber)){
-                    score = PlayerPrefs.GetInt("scores_score_" + -1);
-                }
-                else { 
+                else
+                {
                     StillToLoad = false;
                     break;
                 }
 
+                int deaths;
+                if (PlayerPrefs.HasKey("scores_deaths_" + loadNumber))
+                {
+                    deaths = PlayerPrefs.GetInt("scores_deaths_" + loadNumber, -1);
+                }
+                else
+                {
+                    StillToLoad = false;
+                    break;
+                }
 
-                scores.Add(new ScoreStruct(name, score));
+                int roundsSurvived;
+                if (PlayerPrefs.HasKey("scores_round_" + loadNumber))
+                {
+                    roundsSurvived = PlayerPrefs.GetInt("scores_round_" + loadNumber, -1);
+                }
+                else
+                {
+                    StillToLoad = false;
+                    break;
+                }
+
+
+                scores.Add(new ScoreStruct(name, deaths,roundsSurvived ));
                 loadNumber++;
             }
             catch (PlayerPrefsException)
@@ -213,7 +240,6 @@ public class GameManager : MonoBehaviour
                 throw;
             }
         }
-
     }
 
     // Update is called once per frame
@@ -242,6 +268,7 @@ public class GameManager : MonoBehaviour
                 CheckIfFoxesAreDead();
                 break;
             case GameState.gameEnding:
+                CheckIfChickensAreDead();
                 UpdateScores();
                 break;
             case GameState.ended:
@@ -263,7 +290,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateScores()
     {
-        scores.Add(new ScoreStruct(playerName, deaths));
+        scores.Add(new ScoreStruct(playerName, deaths, chordSender.sequenceNumber-1));
         scores.Sort();
         SaveScores();
         gameState = GameState.ended;
@@ -308,13 +335,19 @@ public class GameManager : MonoBehaviour
         feathers.RemoveAll(f => f == null);
     }
 
-    private void CheckIfChickensAreDead()
+    private void CheckIfChickensAreDead(bool recursive = false)
     {
         List<GameObject> toDestroy = new List<GameObject>();
         toDestroy.Clear();
         chordSender.chickens.RemoveAll(chick => chick == null);
         foreach (ChickenController chick in chordSender.chickens)
         {
+            if(lives <= 0 && !recursive)
+            {
+                chick.state = ChickenController.chickenState.toDelete;
+                CheckIfChickensAreDead(true);
+                gameState = GameState.gameEnding;
+            }
             if (chick.state == ChickenController.chickenState.toDelete)
             {
                 toDestroy.Add(chick.gameObject);
@@ -325,6 +358,8 @@ public class GameManager : MonoBehaviour
                 f.GetComponent<ParticleSystem>().Play();
                 Camera.main.GetComponent<ScreenShake>().AddTrauma();
                 deaths++;
+                lives --;
+                chordSender.scoreText.text = "Round: " + chordSender.sequenceNumber + "\nLives: " + Mathf.Clamp(lives,0,lives);
             }
         }
         foreach(GameObject del in toDestroy)
@@ -384,11 +419,11 @@ public class GameManager : MonoBehaviour
     // get the next chord, if it's the end of a sequence then wait a moment
     private void NewChord()
     {
-        if(chordSender.sequenceNumber > numberOfRounds)
-        {
-            gameState = GameState.gameEnding;
-            return;
-        }
+        //if(chordSender.sequenceNumber > numberOfRounds)
+        //{
+        //    gameState = GameState.gameEnding;
+        //    return;
+        //}
         if (waiting)
         {
             if(waitBeginTime + chordSender.timeBetweenProgressions < Time.time)

@@ -34,13 +34,14 @@ public class ChordSender : MonoBehaviour
 
     [SerializeField]  TextMeshProUGUI chordText;
     [SerializeField]  TextMeshProUGUI keyText;
-    [SerializeField]  TextMeshProUGUI scoreText;
+    [SerializeField] public  TextMeshProUGUI scoreText;
     //[SerializeField]  TextMeshProUGUI functionText;
 
     [SerializeField] Keyboard piano;
 
     public int chordNumber = 0;
     public int sequenceNumber = 0;
+
 
    // public int difficulty = 3; // 3 is normal, 4 is hard
 
@@ -61,7 +62,7 @@ public class ChordSender : MonoBehaviour
     {
         chordText.text = chord.chord.ToString().Substring(0, chord.chord.ToString().Length-1);
         keyText.text = "Key: " + chord.keyThisChordIsIn.ToString();
-        scoreText.text = "Round: " + sequenceNumber + "\nDeaths: " + GameManager.Instance.deaths;
+        
         Debug.Log(chord.chord.ToString());
         while (chickens.Count < chord.notes.Count)
         {

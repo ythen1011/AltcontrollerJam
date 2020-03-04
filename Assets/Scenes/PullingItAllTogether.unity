@@ -419,6 +419,11 @@ PrefabInstance:
       propertyPath: numberOfRounds
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8430869238731540767, guid: bf2ac8718745937488e9d80e019b0806,
+        type: 3}
+      propertyPath: initialnumberOfLives
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8430869238731540766, guid: bf2ac8718745937488e9d80e019b0806,
         type: 3}
       propertyPath: foxSpawnPoint.Array.data[0]
