@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public int round= 0;
     public int deaths = 0;
 
-    public int score = 0;
+    //public int score = 0;
     public GameState gameState;
 
     float waitBeginTime;
@@ -46,13 +46,27 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<GameObject> feathers;
     ScreenShake screenShake;
     float chickenWaitTime;
-    float maximumChickenWaitTime = 7;
+    float maximumChickenWaitTime = 10;
     float foxWaitTime;
     [Range(0, 10)] [SerializeField] float defaultFoxWaitTime;
 
     [Range(0.1f,20)][SerializeField] float defaultFoxSpeed;
     //[Range(0.1f, 20)] [SerializeField] float foxSpeedAdjustmentAmount;
     [Range(0f, 10)] [SerializeField] float CMajorDifficultyAdjustment;
+
+    List<KeyValuePair<String, int>> scores = new List<KeyValuePair<string, int>>(); 
+
+    private void OnApplicationQuit()
+    {
+        for(int i = 0; i < scores.Count;  i++)
+        {
+            PlayerPrefs.SetString("scores_name_" + i, scores[i].Key);
+            PlayerPrefs.SetInt("scores_score_" + i, scores[i].Value);
+        }
+        PlayerPrefs.Save();
+        Destroy(this);
+    }
+
 
     Vector3 camPosition;
     Quaternion camRotation;
@@ -85,7 +99,41 @@ public class GameManager : MonoBehaviour
         screenShake = Camera.main.GetComponent<ScreenShake>();
         foxManager.SetFoxSpeed(defaultFoxSpeed);
         foxWaitTime = defaultFoxWaitTime;
+        bool StillToLoad = true;
+        int loadNumber = 0;
+        while (StillToLoad)
+        {
+            try
+            {
+                string name;
+                if(PlayerPrefs.HasKey("scores_name_"+ loadNumber)){
+                    name = PlayerPrefs.GetString("scores_name_" + loadNumber,"File Load Name Error");
+                }
+                else { 
+                    StillToLoad = false;
+                    break;
+                } 
 
+                int score;
+                if(PlayerPrefs.HasKey("scores_score_"+ loadNumber)){
+                    score = PlayerPrefs.GetInt("scores_score_" + -1);
+                }
+                else { 
+                    StillToLoad = false;
+                    break;
+                }
+
+
+                scores.Add(new KeyValuePair<string, int>(name, score));
+                loadNumber++;
+            }
+            catch (PlayerPrefsException)
+            {
+                StillToLoad = false;
+                break;
+                throw;
+            }
+        }
 
     }
 
@@ -213,6 +261,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckIfChickensAreThereYet()
     {
+        bool chickensReady = false;
         foreach(ChickenController chick in chordSender.chickens)
         {
             if(chick == null) // just to be safe
@@ -220,7 +269,14 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (chick.state == ChickenController.chickenState.runningToChord && Time.time < chickenWaitTime+maximumChickenWaitTime) // still waiting on a chicken
+            if (chick.state == ChickenController.chickenState.runningToChord) // still waiting on a chicken
+            {
+                chickensReady =  false;
+            }
+            if (Time.time < chickenWaitTime + maximumChickenWaitTime) {
+                chickensReady = true; // override
+            }
+            if (!chickensReady)
             {
                 return;
             }
