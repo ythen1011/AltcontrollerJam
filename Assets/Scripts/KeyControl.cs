@@ -39,7 +39,7 @@ public class KeyControl : MonoBehaviour
             {
                 if (!justPressed)
                 {
-                    justPressed = true;
+                    justPressed = true; // im sorry
                 }
             }
            pressed = true;
