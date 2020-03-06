@@ -40,12 +40,17 @@ namespace MidiJack
             get { return MidiDriver.Instance.knobDelegate; }
             set { MidiDriver.Instance.knobDelegate = value; }
         }
+    
+    public static float GetKeyRaw(MidiChannel channel, int noteNumber)
+        {
+            return MidiDriver.Instance.GetKeyRaw(channel, noteNumber);
+        }
 
         // Returns the key state (on: velocity, off: zero).
         public static float GetKey(MidiChannel channel, int noteNumber)
         {
             return MidiDriver.Instance.GetKey(channel, noteNumber);
-        }
+        } 
 
         public static float[] GetAllKeys(MidiChannel channel)
         {

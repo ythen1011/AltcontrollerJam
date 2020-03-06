@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
     }
     public void HighScore()
     {
-        SceneManager.LoadScene("HighScore");
+        SceneManager.LoadScene("HighScores");
     }
 
     public void QuitGame ()

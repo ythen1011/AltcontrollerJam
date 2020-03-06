@@ -66,6 +66,14 @@ namespace MidiJack
             return _channelArray[(int)channel]._noteArray;
         }
 
+        public float GetKeyRaw(MidiChannel channel, int noteNumber)
+        {
+            UpdateIfNeeded();
+            var v = _channelArray[(int)channel]._noteArray[noteNumber];
+            return v;
+            
+        }
+
         public float GetKey(MidiChannel channel, int noteNumber)
         {
             UpdateIfNeeded();

@@ -27,7 +27,7 @@ public class HighScoreScene : MonoBehaviour
        for(int i = 0; i < scores.Count; i++)
         {
             GameObject s = Instantiate(score);
-            s.transform.parent = content.transform;
+            s.transform.SetParent(content.transform);
             ScoreTextController text = s.GetComponent<ScoreTextController>();
             text.number = (i + 1).ToString();
             text.name = scores[i].name;

@@ -86,7 +86,9 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
         }
+       // DontDestroyOnLoad(gameObject);
     }
+
 
     [SerializeField] GameObject popupPrefab;
     GameObject popup;
@@ -189,6 +191,7 @@ public class GameManager : MonoBehaviour
         foxWaitTime = defaultFoxWaitTime;
         lives = initialnumberOfLives;
         GetScores();
+        gameState = GameState.begin;
 
     }
 
@@ -281,6 +284,9 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.ended:
                 SceneManager.LoadScene("HighScores");
+                gameState = GameState.outOfScene;
+                break;
+            case GameState.outOfScene:
                 break;
             default:
                 Debug.LogError("Uhandled Gamestate: " + gameState.ToString());
@@ -477,8 +483,9 @@ public class GameManager : MonoBehaviour
         sendFoxes,
         foxesChasing,
         gameEnding,
-        ended,
         waitingForNameEnter,
+        ended,
+        outOfScene,
     }
 
 }

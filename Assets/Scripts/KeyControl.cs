@@ -6,7 +6,8 @@ using MidiJack;
 public class KeyControl : MonoBehaviour
 {
 
-    public bool justPressed;
+    public bool justPressed = false;
+    bool pressed = false;
     Material defaultMat;
     Material redMat;
     MeshRenderer meshRenderer;
@@ -29,35 +30,55 @@ public class KeyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        justPressed = false;
         float strenght = MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]);
-
-        if (MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]))
+        float raw = MidiMaster.GetKeyRaw(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]);
+        if(strenght > 0 )
         {
+           if(!pressed)
+            {
+                if (!justPressed)
+                {
+                    justPressed = true;
+                }
+            }
+           pressed = true;
+
+        }
+
+        if (justPressed)
+        {
+            MidiMaster.GetKeyDown(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]);
             audioSource.volume = strenght;
             audioSource.pitch = Mathf.Pow(2, ((int)keyOnKeyboard + Keyboard.transpose) / 12f); // pitch shift for the key
             audioSource.time = 0;
-            justPressed = true;
             audioSource.Play();
+            
         }
 
-        if (audioSource.isPlaying && MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]) != 0)
+        if(MidiMaster.GetKey(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]) != 0)
         {
             if (audioSource.isPlaying)
             {
                 meshRenderer.material = redMat;
 
             }
+            else
+            {
+                meshRenderer.material = defaultMat;
+                //pressed = false;
+            }
         }
-        else
+        if (strenght <0.1)
         {
-            meshRenderer.material = defaultMat;
-            justPressed = false;
 
-
-        }
-        if (audioSource.isPlaying && MidiMaster.GetKeyUp(MidiChannel.All, (int)keyboard.KeymappingKeyToNote[keyOnKeyboard]))
-        {
-            audioSource.time = audioSource.clip.length * 0.8f;
+            if (audioSource.isPlaying && pressed)
+            {
+                audioSource.time = audioSource.clip.length * 0.8f;
+            }
+           pressed = false;
+           meshRenderer.material = defaultMat;
+            //justPressed = false;
         }
        // HandleAlternativeComputerKeyboardInput();
     }
